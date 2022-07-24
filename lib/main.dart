@@ -143,22 +143,64 @@ class _NotesPageState extends State<NotesPage> {
             width: double.infinity,
             height: 300,
             color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Wrap(
-                    spacing: 8,
-                    children: Character.values.map((character) => Draggable(
-                      data: character,
-                      feedback: Material(
-                          color: Colors.transparent,
-                          child: _buildCharacterTile(character: character)
-                      ),
-                      child: _buildCharacterTile(character: character, count: getCharacterCount(character)),
-                      onDragEnd: (details) => {
-                        debugPrint(details.wasAccepted.toString())
-                      },
-                    )).toList(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      children: Character.values.where((element) => element.category == Category.unkown).map((character) => buildDraggableCharacterTile(
+                          character: character,
+                          count: getAlignmentCount(character.alignment))
+                      ).toList(),
+                    ),
+                    Text(
+                      "Townsfolk (${getCategoryCount(Category.townsfolk).toString()})",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      children: Character.values.where((element) => element.category == Category.townsfolk).map((character) => buildDraggableCharacterTile(
+                          character: character,
+                          count: getCharacterCount(character))
+                      ).toList(),
+                    ),
+                    Text(
+                      "Outsiders (${getCategoryCount(Category.outsider).toString()})",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      children: Character.values.where((element) => element.category == Category.outsider).map((character) => buildDraggableCharacterTile(
+                          character: character,
+                          count: getCharacterCount(character))
+                      ).toList(),
+                    ),
+                    Text(
+                      "Minions (${getCategoryCount(Category.minion).toString()})",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      children: Character.values.where((element) => element.category == Category.minion).map((character) => buildDraggableCharacterTile(
+                          character: character,
+                          count: getCharacterCount(character))
+                      ).toList(),
+                    ),
+                    Text(
+                      "Demons (${getCategoryCount(Category.demon).toString()})",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      children: Character.values.where((element) => element.category == Category.demon).map((character) => buildDraggableCharacterTile(
+                          character: character,
+                          count: getCharacterCount(character))
+                      ).toList(),
+                    ),
+                  ],
                 ),
               ),
             )
@@ -167,6 +209,22 @@ class _NotesPageState extends State<NotesPage> {
       ),
     );
   }
+
+
+}
+
+Draggable<Character> buildDraggableCharacterTile({required Character character, int? count}) {
+  return Draggable(
+    data: character,
+    feedback: Material(
+        color: Colors.transparent,
+        child: _buildCharacterTile(character: character)
+    ),
+    child: _buildCharacterTile(character: character, count: count),
+    onDragEnd: (details) => {
+      debugPrint(details.wasAccepted.toString())
+    },
+  );
 }
 
 Widget _buildPlayerTile({required Player player, required void Function(Player, Character) onRemove}) {
