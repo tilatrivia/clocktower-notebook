@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(const MyApp());
@@ -82,6 +83,18 @@ class _NotesPageState extends State<NotesPage> {
     });
   }
 
+  int getCharacterCount(Character character) {
+    return players.fold(0, (prev, player) => (player.characters.contains(character)) ? prev + 1 : prev );
+  }
+
+  int getCategoryCount(Category category) {
+    return players.fold(0, (prev, player) => player.characters.fold(prev, (playerPrev, character) => (character.category == category) ? playerPrev + 1 : playerPrev ));
+  }
+
+  int getAlignmentCount(Alignment alignment) {
+    return players.fold(0, (prev, player) => player.characters.fold(prev, (playerPrev, character) => (character.alignment == alignment) ? playerPrev + 1 : playerPrev ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,16 +145,21 @@ class _NotesPageState extends State<NotesPage> {
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Wrap(
-                spacing: 8,
-                children: Character.values.map((character) => Draggable(
-                  data: character,
-                  feedback: Material(child: _buildCharacterTile(character: character)),
-                  child: _buildCharacterTile(character: character),
-                  onDragEnd: (details) => {
-                    debugPrint(details.wasAccepted.toString())
-                  },
-                )).toList(),
+              child: SingleChildScrollView(
+                child: Wrap(
+                    spacing: 8,
+                    children: Character.values.map((character) => Draggable(
+                      data: character,
+                      feedback: Material(
+                          color: Colors.transparent,
+                          child: _buildCharacterTile(character: character)
+                      ),
+                      child: _buildCharacterTile(character: character, count: getCharacterCount(character)),
+                      onDragEnd: (details) => {
+                        debugPrint(details.wasAccepted.toString())
+                      },
+                    )).toList(),
+                ),
               ),
             )
           ),
@@ -175,7 +193,9 @@ Widget _buildPlayerTile({required Player player, required void Function(Player, 
   );
 }
 
-Widget _buildCharacterTile({required Character character, void Function()? onRemove}) {
+Widget _buildCharacterTile({required Character character, void Function()? onRemove, int? count}) {
+  debugPrint(character.toString());
+  debugPrint(count.toString());
   return Padding(
     padding: const EdgeInsets.only(top: 4, bottom: 4),
     child: Chip(
@@ -185,9 +205,22 @@ Widget _buildCharacterTile({required Character character, void Function()? onRem
         color: (character.alignment == Alignment.good) ? Colors.blue : Colors.red,
         size: 24,
       ),
-      label: Text(
-        character.name,
-        style: const TextStyle(fontSize: 20),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            character.name,
+            style: const TextStyle(fontSize: 20),
+          ),
+          if (count != null && count > 0)
+            Container(
+              width: 10,
+            ),
+          if (count != null && count > 0)
+            Text(
+              count.toString()
+            )
+        ],
       ),
       deleteIcon: const Icon(Icons.close),
       onDeleted: onRemove,
