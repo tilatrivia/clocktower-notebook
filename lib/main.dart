@@ -44,6 +44,8 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
+  late TextEditingController controller;
+
   final List<Player> players = [];
   // final Map<String, List<Character>> players = {
   //   "Player 1": [Character.somethingGood],
@@ -83,6 +85,12 @@ class _NotesPageState extends State<NotesPage> {
     });
   }
 
+  void renamePlayer(Player player, String name) {
+    setState(() {
+      player.name = name;
+    });
+  }
+
   int getCharacterCount(Character character) {
     return players.fold(0, (prev, player) => (player.characters.contains(character)) ? prev + 1 : prev );
   }
@@ -95,6 +103,21 @@ class _NotesPageState extends State<NotesPage> {
     return players.fold(0, (prev, player) => player.characters.fold(prev, (playerPrev, character) => (character.alignment == alignment) ? playerPrev + 1 : playerPrev ));
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +125,28 @@ class _NotesPageState extends State<NotesPage> {
         title: const Text("Trouble Brewing Notes"),
         actions: [
           IconButton(
-            onPressed: () => reset(),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("Confirm Reset"),
+                content: const Text("Are you sure you want to clear all of your notes?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("CANCEL")
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        reset();
+                      },
+                      child: const Text("CLEAR")
+                  ),
+                ],
+              )
+            ),
             icon: const Icon(Icons.delete),
           ),
           IconButton(
@@ -126,8 +170,8 @@ class _NotesPageState extends State<NotesPage> {
                   return DragTarget<Character>(
                     builder: (context, candidates, rejects) {
                       return _buildPlayerTile(
-                          player: players.elementAt(index),
-                          onRemove: removeFromPlayer,
+                        context: context,
+                        player: players.elementAt(index),
                       );
                     },
                     onAccept: (character) {
@@ -151,51 +195,51 @@ class _NotesPageState extends State<NotesPage> {
                   children: [
                     Wrap(
                       spacing: 8,
-                      children: Character.values.where((element) => element.category == Category.unkown).map((character) => buildDraggableCharacterTile(
+                      children: Character.values.where((element) => element.category == Category.unkown).map((character) => _buildDraggableCharacterTile(
                           character: character,
                           count: getAlignmentCount(character.alignment))
                       ).toList(),
                     ),
                     Text(
                       "Townsfolk (${getCategoryCount(Category.townsfolk).toString()})",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
                     ),
                     Wrap(
                       spacing: 8,
-                      children: Character.values.where((element) => element.category == Category.townsfolk).map((character) => buildDraggableCharacterTile(
+                      children: Character.values.where((element) => element.category == Category.townsfolk).map((character) => _buildDraggableCharacterTile(
                           character: character,
                           count: getCharacterCount(character))
                       ).toList(),
                     ),
                     Text(
                       "Outsiders (${getCategoryCount(Category.outsider).toString()})",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
                     ),
                     Wrap(
                       spacing: 8,
-                      children: Character.values.where((element) => element.category == Category.outsider).map((character) => buildDraggableCharacterTile(
+                      children: Character.values.where((element) => element.category == Category.outsider).map((character) => _buildDraggableCharacterTile(
                           character: character,
                           count: getCharacterCount(character))
                       ).toList(),
                     ),
                     Text(
                       "Minions (${getCategoryCount(Category.minion).toString()})",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
                     ),
                     Wrap(
                       spacing: 8,
-                      children: Character.values.where((element) => element.category == Category.minion).map((character) => buildDraggableCharacterTile(
+                      children: Character.values.where((element) => element.category == Category.minion).map((character) => _buildDraggableCharacterTile(
                           character: character,
                           count: getCharacterCount(character))
                       ).toList(),
                     ),
                     Text(
                       "Demons (${getCategoryCount(Category.demon).toString()})",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
                     ),
                     Wrap(
                       spacing: 8,
-                      children: Character.values.where((element) => element.category == Category.demon).map((character) => buildDraggableCharacterTile(
+                      children: Character.values.where((element) => element.category == Category.demon).map((character) => _buildDraggableCharacterTile(
                           character: character,
                           count: getCharacterCount(character))
                       ).toList(),
@@ -210,80 +254,113 @@ class _NotesPageState extends State<NotesPage> {
     );
   }
 
-
-}
-
-Draggable<Character> buildDraggableCharacterTile({required Character character, int? count}) {
-  return Draggable(
-    data: character,
-    feedback: Material(
-        color: Colors.transparent,
-        child: _buildCharacterTile(character: character)
-    ),
-    child: _buildCharacterTile(character: character, count: count),
-    onDragEnd: (details) => {
-      debugPrint(details.wasAccepted.toString())
-    },
-  );
-}
-
-Widget _buildPlayerTile({required Player player, required void Function(Player, Character) onRemove}) {
-  return Container(
-    padding: const EdgeInsets.all(8),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              player.name,
-              style: const TextStyle(fontSize: 28),
-            ),
-          ],
-        ),
-        Wrap(
-          spacing: 8,
-          children: player.characters.map((character) => _buildCharacterTile(
-              character: character, onRemove: () => onRemove(player, character))).toList(),
-        )
-      ],
-    ),
-  );
-}
-
-Widget _buildCharacterTile({required Character character, void Function()? onRemove, int? count}) {
-  debugPrint(character.toString());
-  debugPrint(count.toString());
-  return Padding(
-    padding: const EdgeInsets.only(top: 4, bottom: 4),
-    child: Chip(
+  Widget _buildPlayerTile({required BuildContext context, required Player player}) {
+    return Container(
       padding: const EdgeInsets.all(8),
-      avatar: Icon(
-        character.icon,
-        color: (character.alignment == Alignment.good) ? Colors.blue : Colors.red,
-        size: 24,
-      ),
-      label: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            character.name,
-            style: const TextStyle(fontSize: 20),
+          Row(
+            children: [
+              Text(
+                player.name,
+                style:const TextStyle(fontSize: 32, height: 0.8),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.black45,
+                ),
+                onPressed: () async {
+                  final newName = await openNameDialog();
+                  if (newName == null || newName.isEmpty) return;
+                  renamePlayer(player, newName);
+                },
+              )
+            ],
           ),
-          if (count != null && count > 0)
-            Container(
-              width: 10,
-            ),
-          if (count != null && count > 0)
-            Text(
-              count.toString()
-            )
+          Wrap(
+            spacing: 8,
+            children: player.characters.map((character) => _buildCharacterTile(
+                character: character, onRemove: () => removeFromPlayer(player, character))).toList(),
+          )
         ],
       ),
-      deleteIcon: const Icon(Icons.close),
-      onDeleted: onRemove,
-    ),
+    );
+  }
+
+  Future<String?> openNameDialog() => showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Player Name"),
+      content: TextField(
+        autofocus: true,
+        decoration: const InputDecoration(
+            hintText: "Player Name"
+        ),
+        controller: controller,
+        onSubmitted: (_) => submitNameDialog(),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => submitNameDialog(),
+            child: const Text("CHANGE"))
+      ],
+    )
   );
+
+  void submitNameDialog() {
+    Navigator.of(context).pop(controller.text);
+    controller.clear();
+  }
+
+  Draggable<Character> _buildDraggableCharacterTile({required Character character, int? count}) {
+    return Draggable(
+      data: character,
+      feedback: Material(
+          color: Colors.transparent,
+          child: _buildCharacterTile(character: character)
+      ),
+      child: _buildCharacterTile(character: character, count: count),
+      onDragEnd: (details) => {
+        debugPrint(details.wasAccepted.toString())
+      },
+    );
+  }
+
+  Widget _buildCharacterTile({required Character character, void Function()? onRemove, int? count}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 4),
+      child: Chip(
+        padding: const EdgeInsets.all(8),
+        avatar: Icon(
+          character.icon,
+          color: (character.alignment == Alignment.good) ? Colors.blue : Colors.red,
+          size: 24,
+        ),
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              character.name,
+              style: const TextStyle(fontSize: 20),
+            ),
+            if (count != null && count > 0)
+              Container(
+                width: 10,
+              ),
+            if (count != null && count > 0)
+              Text(
+                  count.toString()
+              )
+          ],
+        ),
+        deleteIcon: const Icon(Icons.close),
+        onDeleted: onRemove,
+      ),
+    );
+  }
 }
 
 enum Alignment {
