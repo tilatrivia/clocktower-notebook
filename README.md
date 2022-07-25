@@ -11,5 +11,10 @@ A tool for quickly organizing notes while playing Blood on the Clocktower
 
 # Future Features
 
+* Data persistence
+* Character tooltips
+* Traveller support
+* Character notes
 * Character specific information notes
 * A front cover to temporarily clear your screen of all of your notes
+* Custom scripts
