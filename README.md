@@ -1,16 +1,15 @@
-# clocktower_notes
+# Clocktower Notebook
 
 A tool for quickly organizing notes while playing Blood on the Clocktower
 
-## Getting Started
+# How to Use
 
-This project is a starting point for a Flutter application.
+1. Pick a script
+2. Enter the names of those you will be playing with in the desired order, including yourself
+3. Drag tiles to the player to identify what character or alignment you think they are. You may choose to label bluffs you or others are making.
+4. The mystical notebook will count how many of each character, category, or alignment are in your notes.
 
-A few resources to get you started if this is your first Flutter project:
+# Future Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Character specific information notes
+* A front cover to temporarily clear your screen of all of your notes
