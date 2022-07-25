@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,16 +23,10 @@ class MyApp extends StatelessWidget {
 class Player {
   String name;
   Set<Character> characters;
+  String note;
+  bool dead;
 
-  Player({required String playerName}) : name = playerName, characters = {};
-
-  addCharacter(Character character) {
-    characters.add(character);
-  }
-
-  removeCharacter(Character character) {
-    characters.remove(character);
-  }
+  Player({required String playerName}) : name = playerName, characters = {}, note = "", dead = false;
 }
 
 class NotesPage extends StatefulWidget {
@@ -170,7 +163,6 @@ class _NotesPageState extends State<NotesPage> {
                   return DragTarget<Character>(
                     builder: (context, candidates, rejects) {
                       return _buildPlayerTile(
-                        context: context,
                         player: players.elementAt(index),
                       );
                     },
@@ -254,7 +246,7 @@ class _NotesPageState extends State<NotesPage> {
     );
   }
 
-  Widget _buildPlayerTile({required BuildContext context, required Player player}) {
+  Widget _buildPlayerTile({required Player player}) {
     return Container(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -264,7 +256,7 @@ class _NotesPageState extends State<NotesPage> {
             children: [
               Text(
                 player.name,
-                style:const TextStyle(fontSize: 32, height: 0.8),
+                style:const TextStyle(fontSize: 24),
               ),
               const Spacer(),
               IconButton(
@@ -273,6 +265,7 @@ class _NotesPageState extends State<NotesPage> {
                   color: Colors.black45,
                 ),
                 onPressed: () async {
+                  controller.value = TextEditingValue(text: player.name);
                   final newName = await openNameDialog();
                   if (newName == null || newName.isEmpty) return;
                   renamePlayer(player, newName);
@@ -330,35 +323,32 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   Widget _buildCharacterTile({required Character character, void Function()? onRemove, int? count}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4, bottom: 4),
-      child: Chip(
-        padding: const EdgeInsets.all(8),
-        avatar: Icon(
-          character.icon,
-          color: (character.alignment == Alignment.good) ? Colors.blue : Colors.red,
-          size: 24,
-        ),
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              character.name,
-              style: const TextStyle(fontSize: 20),
-            ),
-            if (count != null && count > 0)
-              Container(
-                width: 10,
-              ),
-            if (count != null && count > 0)
-              Text(
-                  count.toString()
-              )
-          ],
-        ),
-        deleteIcon: const Icon(Icons.close),
-        onDeleted: onRemove,
+    return Chip(
+      padding: const EdgeInsets.all(8),
+      avatar: Icon(
+        character.icon,
+        color: (character.alignment == Alignment.good) ? Colors.blue : Colors.red,
+        size: 24,
       ),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            character.name,
+            style: const TextStyle(fontSize: 20),
+          ),
+          if (count != null && count > 0)
+            Container(
+              width: 10,
+            ),
+          if (count != null && count > 0)
+            Text(
+                count.toString()
+            )
+        ],
+      ),
+      deleteIcon: const Icon(Icons.close),
+      onDeleted: onRemove,
     );
   }
 }
