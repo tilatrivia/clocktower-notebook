@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               ElevatedButton(
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red.shade900)
+                  backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.troubleBrewing))
                 ),
                 onPressed: () => _startGameWithScript(Script.troubleBrewing()),
                 child: const Text("Trouble Brewing",
@@ -76,12 +76,12 @@ class _HomePageState extends State<HomePage> {
               ElevatedButton(
                   style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow.shade900)
+                      backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.sectsAndViolets))
                   ),
-                  onPressed: () => debugPrint("Dark Moon Rising"),
-                  child: const Text("Dark Moon Rising",
+                  onPressed: () => _startGameWithScript(Script.sectsAndViolets()),
+                  child: const Text("Sects and Violets",
                     style: TextStyle(
-                        fontSize: 24,
+                      fontSize: 24,
                     ),
                   )
               ),
@@ -89,16 +89,16 @@ class _HomePageState extends State<HomePage> {
                 height: 8,
               ),
               ElevatedButton(
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.purple.shade900)
-                ),
-                onPressed: () => debugPrint("Sects and Violets"),
-                child: const Text("Sects and Violets",
-                  style: TextStyle(
-                      fontSize: 24,
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
+                      backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.badMoonRising))
                   ),
-                )
+                  onPressed: () => debugPrint("Bad Moon Rising"),
+                  child: const Text("Bad Moon Rising",
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  )
               ),
             ],
           ),

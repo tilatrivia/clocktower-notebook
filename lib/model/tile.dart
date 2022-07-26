@@ -5,8 +5,9 @@ class Tile {
   final IconData icon;
   final Alignment alignment;
   final Category category;
+  final String description;
 
-  const Tile(this.name, this.category, this.alignment, this.icon);
+  const Tile({required this.name, required this.category, required this.alignment, required this.icon, this.description = ""});
 
   bool isEqual(Tile other) {
     return name == other.name
