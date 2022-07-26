@@ -229,7 +229,7 @@ class _NotebookPageState extends State<NotebookPage> {
           ),
           Wrap(
             spacing: 8,
-            children: player.characters.map((tile) => _buildCharacterTile(
+            children: player.characters.map((tile) => _buildDraggableCharacterTile(
                 tile: tile, onRemove: () => removeFromPlayer(player, tile))).toList(),
           )
         ],
@@ -237,17 +237,18 @@ class _NotebookPageState extends State<NotebookPage> {
     );
   }
 
-  Draggable<Tile> _buildDraggableCharacterTile({required Tile tile, int? count}) {
+  Draggable<Tile> _buildDraggableCharacterTile({required Tile tile, int? count, void Function()? onRemove}) {
     return Draggable(
       data: tile,
       feedback: Material(
           color: Colors.transparent,
           child: _buildCharacterTile(tile: tile)
       ),
-      child: _buildCharacterTile(tile: tile, count: count),
       onDragEnd: (details) => {
         debugPrint(details.wasAccepted.toString())
       },
+      onDragCompleted: onRemove, // TODO: Have the tile left behind look different if going from player to player
+      child: _buildCharacterTile(tile: tile, count: count, onRemove: onRemove),
     );
   }
 
