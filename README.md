@@ -22,6 +22,7 @@ Version 0.2
 # Future Features
 
 ## Version 1.0
+* Landscape Mode
 * Bad Moon Rising Characters
 * Character notes
 * Data persistence
