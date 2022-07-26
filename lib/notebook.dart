@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clocktower_notes/players.dart';
+import 'package:clocktower_notes/widgets/character_tile.dart';
 import 'package:flutter/material.dart' hide Alignment;
 
 import 'model/player.dart';
@@ -38,17 +39,29 @@ class _NotebookPageState extends State<NotebookPage> {
   }
 
   int getCharacterCount(Tile tile) {
-    return players.fold(0, (prev, player) => (player.characters.contains(tile)) ? prev + 1 : prev );
+    return players.fold(0,
+        (prev, player) => (player.characters.contains(tile)) ? prev + 1 : prev);
   }
 
   int getCategoryCount(Category category) {
-    return players.fold(0, (prev, player) => player.characters.fold(prev, (playerPrev, character) => (character.category == category) ? playerPrev + 1 : playerPrev ));
+    return players.fold(
+        0,
+        (prev, player) => player.characters.fold(
+            prev,
+            (playerPrev, character) => (character.category == category)
+                ? playerPrev + 1
+                : playerPrev));
   }
 
   int getAlignmentCount(Alignment alignment) {
-    return players.fold(0, (prev, player) => player.characters.fold(prev, (playerPrev, character) => (character.alignment == alignment) ? playerPrev + 1 : playerPrev ));
+    return players.fold(
+        0,
+        (prev, player) => player.characters.fold(
+            prev,
+            (playerPrev, character) => (character.alignment == alignment)
+                ? playerPrev + 1
+                : playerPrev));
   }
-
 
   @override
   void initState() {
@@ -60,12 +73,12 @@ class _NotebookPageState extends State<NotebookPage> {
   }
 
   void _awaitPlayerInfo() async {
-    List<Player> receivedPlayers = await Navigator.push(context, MaterialPageRoute(builder: (_) => const PlayersPage()));
+    List<Player> receivedPlayers = await Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const PlayersPage()));
     setState(() {
       players = receivedPlayers;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +88,15 @@ class _NotebookPageState extends State<NotebookPage> {
         appBar: AppBar(
           backgroundColor: Script.getScriptColor(widget.script.scriptId),
           automaticallyImplyLeading: false,
-          title: Text("${Script.getScriptTitle(widget.script.scriptId)} Notebook"),
+          title:
+              Text("${Script.getScriptTitle(widget.script.scriptId)} Notebook"),
           actions: [
             TextButton(
-                onPressed: _confirmExit,
-                child: const Text("END GAME",
-                  style: TextStyle(color: Colors.white),
-                ),
+              onPressed: _confirmExit,
+              child: const Text(
+                "END GAME",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -99,13 +114,13 @@ class _NotebookPageState extends State<NotebookPage> {
                               player: players.elementAt(index),
                             );
                           },
+                          onWillAccept: (value) => !players.elementAt(index).characters.contains(value),
                           onAccept: (character) {
                             addToPlayer(players.elementAt(index), character);
-                          }
-                      );
+                          });
                     },
-                    separatorBuilder: (BuildContext context, int index) => const Divider()
-                ),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider()),
               ),
             ),
             Container(
@@ -120,104 +135,146 @@ class _NotebookPageState extends State<NotebookPage> {
                       children: [
                         Wrap(
                           spacing: 8,
-                          children: widget.script.tiles.where((element) => element.category == Category.unkown).map((tile) => _buildDraggableCharacterTile(
-                              tile: tile,
-                              count: getAlignmentCount(tile.alignment))
-                          ).toList(),
+                          children: widget.script.tiles
+                              .where((element) =>
+                                  element.category == Category.unkown)
+                              .map((tile) => CharacterTile(
+                                  tile: tile,
+                                  count: getAlignmentCount(tile.alignment)))
+                              .toList(),
                         ),
                         Row(
                           children: [
                             const Text(
                               "Townsfolk",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  height: 2),
                             ),
                             Container(
                               width: 8,
                             ),
                             Text(
                               "${getCategoryCount(Category.townsfolk).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 2.5,
+                                  color: Colors.black54),
                             ),
                           ],
                         ),
                         Wrap(
                           spacing: 8,
-                          children: widget.script.tiles.where((element) => element.category == Category.townsfolk).map((tile) => _buildDraggableCharacterTile(
-                              tile: tile,
-                              count: getCharacterCount(tile))
-                          ).toList(),
+                          children: widget.script.tiles
+                              .where((element) =>
+                                  element.category == Category.townsfolk)
+                              .map((tile) => CharacterTile(
+                                  tile: tile,
+                                  count: getCharacterCount(tile)))
+                              .toList(),
                         ),
                         Row(
                           children: [
                             const Text(
                               "Outsiders",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  height: 2),
                             ),
                             Container(
                               width: 8,
                             ),
                             Text(
                               "${getCategoryCount(Category.outsider).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 2.5,
+                                  color: Colors.black54),
                             ),
                           ],
                         ),
                         Wrap(
                           spacing: 8,
-                          children: widget.script.tiles.where((element) => element.category == Category.outsider).map((tile) => _buildDraggableCharacterTile(
-                              tile: tile,
-                              count: getCharacterCount(tile))
-                          ).toList(),
+                          children: widget.script.tiles
+                              .where((element) =>
+                                  element.category == Category.outsider)
+                              .map((tile) => CharacterTile(
+                                  tile: tile,
+                                  count: getCharacterCount(tile)))
+                              .toList(),
                         ),
                         Row(
                           children: [
                             const Text(
                               "Minions",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  height: 2),
                             ),
                             Container(
                               width: 8,
                             ),
                             Text(
                               "${getCategoryCount(Category.minion).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 2.5,
+                                  color: Colors.black54),
                             ),
                           ],
                         ),
                         Wrap(
                           spacing: 8,
-                          children: widget.script.tiles.where((element) => element.category == Category.minion).map((tile) => _buildDraggableCharacterTile(
-                              tile: tile,
-                              count: getCharacterCount(tile))
-                          ).toList(),
+                          children: widget.script.tiles
+                              .where((element) =>
+                                  element.category == Category.minion)
+                              .map((tile) => CharacterTile(
+                                  tile: tile,
+                                  count: getCharacterCount(tile)))
+                              .toList(),
                         ),
                         Row(
                           children: [
                             const Text(
                               "Demons",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  height: 2),
                             ),
                             Container(
                               width: 8,
                             ),
                             Text(
                               "${getCategoryCount(Category.demon).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 2.5,
+                                  color: Colors.black54),
                             ),
                           ],
                         ),
                         Wrap(
                           spacing: 8,
-                          children: widget.script.tiles.where((element) => element.category == Category.demon).map((tile) => _buildDraggableCharacterTile(
-                              tile: tile,
-                              count: getCharacterCount(tile))
-                          ).toList(),
+                          children: widget.script.tiles
+                              .where((element) =>
+                                  element.category == Category.demon)
+                              .map((tile) => CharacterTile(
+                                  tile: tile,
+                                  count: getCharacterCount(tile)))
+                              .toList(),
                         ),
                       ],
                     ),
                   ),
-                )
-            ),
+                )),
           ],
         ),
       ),
@@ -226,27 +283,24 @@ class _NotebookPageState extends State<NotebookPage> {
 
   Future<bool> _confirmExit() async {
     return (await showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(
-              title: const Text("End Game"),
-              content: const Text("Are you sure you want to clear all of your notes and return to the script menu?"),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text("CANCEL")
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("EXIT")
-                )
-              ],
-            )
-    )
-    ) ?? false;
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text("End Game"),
+                  content: const Text(
+                      "Are you sure you want to clear all of your notes and return to the script menu?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text("CANCEL")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("EXIT"))
+                  ],
+                ))) ??
+        false;
   }
 
   Widget _buildPlayerTile({required Player player}) {
@@ -259,13 +313,14 @@ class _NotebookPageState extends State<NotebookPage> {
             children: [
               Text(
                 player.name,
-                style:const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
               const Spacer(),
               IconButton(
                 icon: Icon(
                   Icons.sentiment_very_dissatisfied_outlined,
-                  color: (player.dead) ? Colors.purple.shade900 : Colors.black12,
+                  color:
+                      (player.dead) ? Colors.purple.shade900 : Colors.black12,
                 ),
                 onPressed: () => togglePlayerDead(player),
               )
@@ -273,80 +328,12 @@ class _NotebookPageState extends State<NotebookPage> {
           ),
           Wrap(
             spacing: 8,
-            children: player.characters.map((tile) => _buildDraggableCharacterTile(
-                tile: tile, onRemove: () => removeFromPlayer(player, tile))).toList(),
+            children: player.characters
+                .map((tile) => CharacterTile(
+                    tile: tile, onRemove: () => removeFromPlayer(player, tile)))
+                .toList(),
           )
         ],
-      ),
-    );
-  }
-
-  Draggable<Tile> _buildDraggableCharacterTile({required Tile tile, int? count, void Function()? onRemove}) {
-    return Draggable(
-      data: tile,
-      feedback: Material(
-          color: Colors.transparent,
-          child: _buildCharacterTile(tile: tile)
-      ),
-      onDragEnd: (details) => {
-        debugPrint(details.wasAccepted.toString())
-      },
-      onDragCompleted: onRemove, // TODO: Have the tile left behind look different if going from player to player
-      child: _buildCharacterTile(tile: tile, count: count, onRemove: onRemove),
-    );
-  }
-
-  Widget _buildCharacterTile({required Tile tile, void Function()? onRemove, int? count}) {
-    return GestureDetector(
-      onTap: () => showDialog(
-          context: context,
-          builder: (context) => SimpleDialog(
-            title: SizedBox(
-              width: double.infinity,
-              child: Text(tile.name,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            children: [
-              Icon(tile.icon,
-                size: 64,
-                color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 8, left: 32, right: 32),
-                child: Text(tile.description,
-                  style: const TextStyle(fontSize: 16)
-                ),
-              )
-            ]
-          )
-      ),
-      child: Chip(
-        padding: const EdgeInsets.all(8),
-        avatar: Icon(
-          tile.icon,
-          color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
-          size: 24,
-        ),
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              tile.name,
-              style: const TextStyle(fontSize: 20),
-            ),
-            if (count != null && count > 0)
-              Container(
-                width: 10,
-              ),
-            if (count != null && count > 0)
-              Text(
-                  count.toString()
-              )
-          ],
-        ),
-        deleteIcon: const Icon(Icons.close),
-        onDeleted: onRemove,
       ),
     );
   }
