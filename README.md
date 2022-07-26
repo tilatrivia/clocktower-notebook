@@ -9,12 +9,28 @@ A tool for quickly organizing notes while playing Blood on the Clocktower
 3. Drag tiles to the player to identify what character or alignment you think they are. You may choose to label bluffs you or others are making.
 4. The mystical notebook will count how many of each character, category, or alignment are in your notes.
 
+# Current Features
+
+Version 0.2
+
+* Selecting from three original scripts
+* Adding, naming, and reordering players
+* Drag and drop character tiles onto players
+* Mark players as dead
+* View totals for each alignment, character type, and individual character
+
 # Future Features
 
-* Data persistence
-* Character tooltips
-* Traveller support
+## Version 1.0
+* Bad Moon Rising Characters
 * Character notes
+* Data persistence
+
+## Version 1.1
 * Character specific information notes
 * A front cover to temporarily clear your screen of all of your notes
-* Custom scripts
+* More thematic styling
+
+## Version 1.2
+* Traveller support
+* Custom game scripts

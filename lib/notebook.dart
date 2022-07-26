@@ -125,9 +125,20 @@ class _NotebookPageState extends State<NotebookPage> {
                               count: getAlignmentCount(tile.alignment))
                           ).toList(),
                         ),
-                        Text(
-                          "Townsfolk (${getCategoryCount(Category.townsfolk).toString()}/${Script.getBaseTownsfolkCount(players.length)})",
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                        Row(
+                          children: [
+                            const Text(
+                              "Townsfolk",
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                            ),
+                            Container(
+                              width: 8,
+                            ),
+                            Text(
+                              "${getCategoryCount(Category.townsfolk).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                            ),
+                          ],
                         ),
                         Wrap(
                           spacing: 8,
@@ -136,9 +147,20 @@ class _NotebookPageState extends State<NotebookPage> {
                               count: getCharacterCount(tile))
                           ).toList(),
                         ),
-                        Text(
-                          "Outsiders (${getCategoryCount(Category.outsider).toString()}/${Script.getBaseOutsiderCount(players.length)})",
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                        Row(
+                          children: [
+                            const Text(
+                              "Outsiders",
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                            ),
+                            Container(
+                              width: 8,
+                            ),
+                            Text(
+                              "${getCategoryCount(Category.outsider).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                            ),
+                          ],
                         ),
                         Wrap(
                           spacing: 8,
@@ -147,9 +169,20 @@ class _NotebookPageState extends State<NotebookPage> {
                               count: getCharacterCount(tile))
                           ).toList(),
                         ),
-                        Text(
-                          "Minions (${getCategoryCount(Category.minion).toString()}/${Script.getBaseMinionCount(players.length)})",
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                        Row(
+                          children: [
+                            const Text(
+                              "Minions",
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                            ),
+                            Container(
+                              width: 8,
+                            ),
+                            Text(
+                              "${getCategoryCount(Category.minion).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                            ),
+                          ],
                         ),
                         Wrap(
                           spacing: 8,
@@ -158,9 +191,20 @@ class _NotebookPageState extends State<NotebookPage> {
                               count: getCharacterCount(tile))
                           ).toList(),
                         ),
-                        Text(
-                          "Demons (${getCategoryCount(Category.demon).toString()}/1)",
-                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                        Row(
+                          children: [
+                            const Text(
+                              "Demons",
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                            ),
+                            Container(
+                              width: 8,
+                            ),
+                            Text(
+                              "${getCategoryCount(Category.demon).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 2.5, color: Colors.black54),
+                            ),
+                          ],
                         ),
                         Wrap(
                           spacing: 8,
