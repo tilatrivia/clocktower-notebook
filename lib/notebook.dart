@@ -252,32 +252,57 @@ class _NotebookPageState extends State<NotebookPage> {
   }
 
   Widget _buildCharacterTile({required Tile tile, void Function()? onRemove, int? count}) {
-    return Chip(
-      padding: const EdgeInsets.all(8),
-      avatar: Icon(
-        tile.icon,
-        color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
-        size: 24,
-      ),
-      label: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            tile.name,
-            style: const TextStyle(fontSize: 20),
-          ),
-          if (count != null && count > 0)
-            Container(
-              width: 10,
+    return GestureDetector(
+      onTap: () => showDialog(
+          context: context,
+          builder: (context) => SimpleDialog(
+            title: SizedBox(
+              width: double.infinity,
+              child: Text(tile.name,
+                textAlign: TextAlign.center,
+              ),
             ),
-          if (count != null && count > 0)
-            Text(
-                count.toString()
-            )
-        ],
+            children: [
+              Icon(tile.icon,
+                size: 64,
+                color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16, bottom: 8, left: 32, right: 32),
+                child: Text(tile.description,
+                  style: const TextStyle(fontSize: 16)
+                ),
+              )
+            ]
+          )
       ),
-      deleteIcon: const Icon(Icons.close),
-      onDeleted: onRemove,
+      child: Chip(
+        padding: const EdgeInsets.all(8),
+        avatar: Icon(
+          tile.icon,
+          color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
+          size: 24,
+        ),
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              tile.name,
+              style: const TextStyle(fontSize: 20),
+            ),
+            if (count != null && count > 0)
+              Container(
+                width: 10,
+              ),
+            if (count != null && count > 0)
+              Text(
+                  count.toString()
+              )
+          ],
+        ),
+        deleteIcon: const Icon(Icons.close),
+        onDeleted: onRemove,
+      ),
     );
   }
 }
