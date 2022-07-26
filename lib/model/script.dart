@@ -388,6 +388,19 @@ class Script {
     }
   }
 
+  static String getScriptTitle(Scripts scriptId) {
+    switch (scriptId) {
+      case Scripts.troubleBrewing:
+        return "Trouble Brewing";
+      case Scripts.sectsAndViolets:
+        return "Sects And Violets";
+      case Scripts.badMoonRising:
+        return "Bad Moon Rising";
+      default:
+        return "Custom Script";
+    }
+  }
+
   static int getBaseTownsfolkCount(int players) {
     switch (players) {
       case 0:

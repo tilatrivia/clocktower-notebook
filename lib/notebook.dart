@@ -73,8 +73,9 @@ class _NotebookPageState extends State<NotebookPage> {
       onWillPop: _confirmExit,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Script.getScriptColor(widget.script.scriptId),
           automaticallyImplyLeading: false,
-          title: const Text("Trouble Brewing Notes"),
+          title: Text("${Script.getScriptTitle(widget.script.scriptId)} Notebook"),
           actions: [
             TextButton(
                 onPressed: _confirmExit,
