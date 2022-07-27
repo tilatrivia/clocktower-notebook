@@ -60,20 +60,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _storeScript(Script script) async {
-    debugPrint("Saving Script to Store...");
     final scriptJSON = jsonEncode(script);
-    debugPrint(scriptJSON);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(Script.scriptKey, scriptJSON);
   }
 
   void _checkStore() async {
-    debugPrint("Checking Store...");
     final prefs = await SharedPreferences.getInstance();
     final scriptJSON = prefs.getString(Script.scriptKey);
     final playersJSON = prefs.getString(Player.playersKey);
-    debugPrint(scriptJSON);
-    debugPrint(playersJSON);
 
     if (scriptJSON != null && playersJSON != null) {
       final Script script = Script.fromJson(jsonDecode(scriptJSON));

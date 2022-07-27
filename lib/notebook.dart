@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:clocktower_notes/players.dart';
 import 'package:clocktower_notes/widgets/character_tile.dart';
+import 'package:clocktower_notes/widgets/player_container.dart';
 import 'package:flutter/material.dart' hide Alignment;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,27 +31,22 @@ class _NotebookPageState extends State<NotebookPage> {
     Timer.run(() {
       debugPrint(widget.lastPlayers.toString());
       if (widget.lastPlayers != null) {
-        debugPrint("Loading Previous Players");
         setState(() {
           players.addAll(widget.lastPlayers!);
         });
       } else {
-        debugPrint("No Players, opening dialog");
         _awaitPlayerInfo();
       }
     });
   }
   
   void _storePlayers() async {
-    debugPrint("Updating Store...");
     String playersJSON = jsonEncode(players);
-    debugPrint(playersJSON);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(Player.playersKey, playersJSON);
   }
 
   void _clearStore() async {
-    debugPrint("Clearing Store...");
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(Player.playersKey);
     await prefs.remove(Script.scriptKey);
@@ -139,16 +135,12 @@ class _NotebookPageState extends State<NotebookPage> {
                 child: ListView.separated(
                     itemCount: players.length,
                     itemBuilder: (context, index) {
-                      return DragTarget<Tile>(
-                          builder: (context, candidates, rejects) {
-                            return _buildPlayerTile(
-                              player: players.elementAt(index),
-                            );
-                          },
-                          onWillAccept: (value) => !players.elementAt(index).characters.contains(value),
-                          onAccept: (character) {
-                            addToPlayer(players.elementAt(index), character);
-                          });
+                      return PlayerContainer(
+                          player: players.elementAt(index),
+                          addCharacter: addToPlayer,
+                          removeCharacter: removeFromPlayer,
+                          toggleDead: togglePlayerDead,
+                      );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
                         const Divider()),
@@ -333,40 +325,5 @@ class _NotebookPageState extends State<NotebookPage> {
                   ],
                 ))) ??
         false;
-  }
-
-  Widget _buildPlayerTile({required Player player}) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                player.name,
-                style: const TextStyle(fontSize: 24),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: Icon(
-                  Icons.sentiment_very_dissatisfied_outlined,
-                  color:
-                      (player.dead) ? Colors.purple.shade900 : Colors.black12,
-                ),
-                onPressed: () => togglePlayerDead(player),
-              )
-            ],
-          ),
-          Wrap(
-            spacing: 8,
-            children: player.characters
-                .map((tile) => CharacterTile(
-                    tile: tile, onRemove: () => removeFromPlayer(player, tile)))
-                .toList(),
-          )
-        ],
-      ),
-    );
   }
 }
