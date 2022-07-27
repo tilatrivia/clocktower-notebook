@@ -5,12 +5,24 @@ import '../model/player.dart';
 import '../model/tile.dart';
 
 class PlayerContainer extends StatelessWidget {
+  final BuildContext context;
   final Player player;
   final Function(Player, Tile) addCharacter;
   final Function(Player, Tile) removeCharacter;
   final Function(Player) toggleDead;
+  final Function(Player, String) updateNote;
+  final TextEditingController textEditingController;
 
-  const PlayerContainer({Key? key, required this.player, required this.addCharacter, required this.removeCharacter, required this.toggleDead}) : super(key: key);
+  const PlayerContainer({
+        Key? key,
+        required this.context,
+        required this.player,
+        required this.addCharacter,
+        required this.removeCharacter,
+        required this.toggleDead,
+        required this.updateNote,
+        required this.textEditingController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +47,33 @@ class PlayerContainer extends StatelessWidget {
                         (player.dead) ? Colors.purple.shade900 : Colors.black12,
                       ),
                       onPressed: () => toggleDead(player),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                      onPressed: _editNotes,
                     )
                   ],
                 ),
                 Wrap(
                   spacing: 8,
                   children: player.characters
-                      .map((tile) => CharacterTile(
-                      tile: tile, onRemove: () => removeCharacter(player, tile)))
+                      .map((tile) =>
+                      CharacterTile(
+                          tile: tile,
+                          onRemove: () => removeCharacter(player, tile)))
                       .toList(),
-                )
+                ),
+                if (player.note.isNotEmpty)
+                  const SizedBox(
+                  height: 8,
+                ),
+                if (player.note.isNotEmpty)
+                  Text(
+                    player.note,
+                    style: const TextStyle(fontSize: 18),
+                ),
               ],
             ),
           );
@@ -53,7 +82,31 @@ class PlayerContainer extends StatelessWidget {
         onAccept: (character) {
           addCharacter(player, character);
         });
+  }
 
+  void _editNotes() async {
+    textEditingController.text = player.note;
+    await showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: Text("Notes about ${player.name}"),
+              content: TextField(
+                autofocus: true,
+                textCapitalization: TextCapitalization.sentences,
+                controller: textEditingController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("SAVE")
+                ),
+              ],
+            )
+    );
+    updateNote(player, textEditingController.value.text);
   }
 
 }

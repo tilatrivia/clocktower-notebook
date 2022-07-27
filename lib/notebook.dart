@@ -27,6 +27,7 @@ class _NotebookPageState extends State<NotebookPage> {
 
   late ScrollController playersScrollController;
   late ScrollController charactersScrollController;
+  late TextEditingController textEditingController;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _NotebookPageState extends State<NotebookPage> {
 
     playersScrollController = ScrollController();
     charactersScrollController = ScrollController();
+    textEditingController = TextEditingController();
 
     Timer.run(() {
       if (widget.lastPlayers != null) {
@@ -75,6 +77,13 @@ class _NotebookPageState extends State<NotebookPage> {
   void _toggleDead(Player player) {
     setState(() {
       player.dead = !player.dead;
+    });
+    _storePlayers();
+  }
+
+  void _updateNote(Player player, String note) {
+    setState(() {
+      player.note = note;
     });
     _storePlayers();
   }
@@ -133,9 +142,9 @@ class _NotebookPageState extends State<NotebookPage> {
             ),
           ],
         ),
-        body: OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.portrait) {
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 600) {
               return _portraitLayout();
             } else {
               return _landscapeLayout();
@@ -159,11 +168,14 @@ class _NotebookPageState extends State<NotebookPage> {
                 width: double.infinity,
                 color: Colors.grey.shade50,
                 child: PlayerList(
+                  context: context,
                   players: players,
                   addCharacter: _addCharacter,
                   removeCharacter: _removeCharacter,
                   toggleDead: _toggleDead,
+                  updateNote: _updateNote,
                   scrollController: playersScrollController,
+                  textEditingController: textEditingController
                 )
             ),
             Container(
@@ -200,11 +212,14 @@ class _NotebookPageState extends State<NotebookPage> {
                 width: contentWidth,
                 color: Colors.grey.shade50,
                 child: PlayerList(
-                  players: players,
-                  addCharacter: _addCharacter,
-                  removeCharacter: _removeCharacter,
-                  toggleDead: _toggleDead,
-                  scrollController: playersScrollController,
+                    context: context,
+                    players: players,
+                    addCharacter: _addCharacter,
+                    removeCharacter: _removeCharacter,
+                    toggleDead: _toggleDead,
+                    updateNote: _updateNote,
+                    scrollController: playersScrollController,
+                    textEditingController: textEditingController
                 )
             ),
             Container(

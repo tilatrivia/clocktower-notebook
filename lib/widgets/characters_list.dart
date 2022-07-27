@@ -47,7 +47,7 @@ class CharactersList extends StatelessWidget {
                 const Text(
                   "Townsfolk",
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                      fontSize: 20, fontWeight: FontWeight.w600, height: 2),
                 ),
                 Container(
                   width: 8,
@@ -75,7 +75,7 @@ class CharactersList extends StatelessWidget {
                 const Text(
                   "Outsiders",
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                      fontSize: 20, fontWeight: FontWeight.w600, height: 2),
                 ),
                 Container(
                   width: 8,
@@ -103,7 +103,7 @@ class CharactersList extends StatelessWidget {
                 const Text(
                   "Minions",
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                      fontSize: 20, fontWeight: FontWeight.w600, height: 2),
                 ),
                 Container(
                   width: 8,
@@ -131,7 +131,7 @@ class CharactersList extends StatelessWidget {
                 const Text(
                   "Demons",
                   style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w600, height: 2),
+                      fontSize: 20, fontWeight: FontWeight.w600, height: 2),
                 ),
                 Container(
                   width: 8,
