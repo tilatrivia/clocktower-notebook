@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:clocktower_notes/players.dart';
-import 'package:clocktower_notes/widgets/character_tile.dart';
+import 'package:clocktower_notes/widgets/characters_list.dart';
 import 'package:clocktower_notes/widgets/player_container.dart';
 import 'package:flutter/material.dart' hide Alignment;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -150,153 +150,14 @@ class _NotebookPageState extends State<NotebookPage> {
                 width: double.infinity,
                 height: 300,
                 color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          spacing: 8,
-                          children: widget.script.tiles
-                              .where((element) =>
-                                  element.category == Category.unkown)
-                              .map((tile) => CharacterTile(
-                                  tile: tile,
-                                  count: getAlignmentCount(tile.alignment)))
-                              .toList(),
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Townsfolk",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  height: 2),
-                            ),
-                            Container(
-                              width: 8,
-                            ),
-                            Text(
-                              "${getCategoryCount(Category.townsfolk).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 2.5,
-                                  color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                        Wrap(
-                          spacing: 8,
-                          children: widget.script.tiles
-                              .where((element) =>
-                                  element.category == Category.townsfolk)
-                              .map((tile) => CharacterTile(
-                                  tile: tile,
-                                  count: getCharacterCount(tile)))
-                              .toList(),
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Outsiders",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  height: 2),
-                            ),
-                            Container(
-                              width: 8,
-                            ),
-                            Text(
-                              "${getCategoryCount(Category.outsider).toString()}/${Script.getBaseOutsiderCount(players.length)}",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 2.5,
-                                  color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                        Wrap(
-                          spacing: 8,
-                          children: widget.script.tiles
-                              .where((element) =>
-                                  element.category == Category.outsider)
-                              .map((tile) => CharacterTile(
-                                  tile: tile,
-                                  count: getCharacterCount(tile)))
-                              .toList(),
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Minions",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  height: 2),
-                            ),
-                            Container(
-                              width: 8,
-                            ),
-                            Text(
-                              "${getCategoryCount(Category.minion).toString()}/${Script.getBaseMinionCount(players.length)}",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 2.5,
-                                  color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                        Wrap(
-                          spacing: 8,
-                          children: widget.script.tiles
-                              .where((element) =>
-                                  element.category == Category.minion)
-                              .map((tile) => CharacterTile(
-                                  tile: tile,
-                                  count: getCharacterCount(tile)))
-                              .toList(),
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              "Demons",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  height: 2),
-                            ),
-                            Container(
-                              width: 8,
-                            ),
-                            Text(
-                              "${getCategoryCount(Category.demon).toString()}/1",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 2.5,
-                                  color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                        Wrap(
-                          spacing: 8,
-                          children: widget.script.tiles
-                              .where((element) =>
-                                  element.category == Category.demon)
-                              .map((tile) => CharacterTile(
-                                  tile: tile,
-                                  count: getCharacterCount(tile)))
-                              .toList(),
-                        ),
-                      ],
-                    ),
-                  ),
+                child: CharactersList(
+                  characters: widget.script.tiles,
+                  totalTownsfolk: Script.getBaseTownsfolkCount(players.length),
+                  totalOutsiders: Script.getBaseOutsiderCount(players.length),
+                  totalMinions: Script.getBaseMinionCount(players.length),
+                  getAlignmentCount: getAlignmentCount,
+                  getCategoryCount: getCategoryCount,
+                  getCharacterCount: getCharacterCount,
                 )),
           ],
         ),
