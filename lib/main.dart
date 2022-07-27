@@ -39,15 +39,16 @@ class _HomePageState extends State<HomePage> {
   List<Player>? lastPlayers;
 
   void _startNewGame(Script script) {
+    _clearPlayers();
     _storeScript(script);
-    _awaitNavigatorPage(script, lastPlayers);
+    _awaitNavigatorPage(script: script);
   }
 
   void _startExistingGame() {
-    _awaitNavigatorPage(lastScript!, lastPlayers);
+    _awaitNavigatorPage(script: lastScript!, lastPlayers: lastPlayers);
   }
 
-  void _awaitNavigatorPage(Script script, List<Player>? lastPlayers) async {
+  void _awaitNavigatorPage({required Script script, List<Player>? lastPlayers}) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotebookPage(script: script, lastPlayers: lastPlayers)));
     _checkStore();
   }
@@ -57,6 +58,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _checkStore();
+  }
+
+  void _clearPlayers() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(Player.playersKey);
   }
 
   void _storeScript(Script script) async {

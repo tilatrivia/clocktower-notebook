@@ -36,7 +36,6 @@ class _NotebookPageState extends State<NotebookPage> {
     charactersScrollController = ScrollController();
 
     Timer.run(() {
-      debugPrint(widget.lastPlayers.toString());
       if (widget.lastPlayers != null) {
         setState(() {
           players.addAll(widget.lastPlayers!);

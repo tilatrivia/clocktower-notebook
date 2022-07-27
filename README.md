@@ -37,5 +37,4 @@ Version 0.2
 * Custom game scripts
 
 # Know Bugs
-* New game loads with old players if saved
 * Web puts x and drag point on top of one another
