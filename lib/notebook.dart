@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:clocktower_notes/players.dart';
 import 'package:clocktower_notes/widgets/characters_list.dart';
-import 'package:clocktower_notes/widgets/player_container.dart';
+import 'package:clocktower_notes/widgets/player_list.dart';
 import 'package:flutter/material.dart' hide Alignment;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,33 +52,33 @@ class _NotebookPageState extends State<NotebookPage> {
     await prefs.remove(Script.scriptKey);
   }
 
-  void addToPlayer(Player player, Tile tile) {
+  void _addCharacter(Player player, Tile tile) {
     setState(() {
       player.characters.add(tile);
     });
     _storePlayers();
   }
 
-  void removeFromPlayer(Player player, Tile tile) {
+  void _removeCharacter(Player player, Tile tile) {
     setState(() {
       player.characters.remove(tile);
     });
     _storePlayers();
   }
 
-  void togglePlayerDead(Player player) {
+  void _toggleDead(Player player) {
     setState(() {
       player.dead = !player.dead;
     });
     _storePlayers();
   }
 
-  int getCharacterCount(Tile tile) {
+  int _getCharacterCount(Tile tile) {
     return players.fold(0,
         (prev, player) => (player.characters.contains(tile)) ? prev + 1 : prev);
   }
 
-  int getCategoryCount(Category category) {
+  int _getCategoryCount(Category category) {
     return players.fold(
         0,
         (prev, player) => player.characters.fold(
@@ -88,7 +88,7 @@ class _NotebookPageState extends State<NotebookPage> {
                 : playerPrev));
   }
 
-  int getAlignmentCount(Alignment alignment) {
+  int _getAlignmentCount(Alignment alignment) {
     return players.fold(
         0,
         (prev, player) => player.characters.fold(
@@ -132,18 +132,12 @@ class _NotebookPageState extends State<NotebookPage> {
             Expanded(
               child: SizedBox(
                 width: double.infinity,
-                child: ListView.separated(
-                    itemCount: players.length,
-                    itemBuilder: (context, index) {
-                      return PlayerContainer(
-                          player: players.elementAt(index),
-                          addCharacter: addToPlayer,
-                          removeCharacter: removeFromPlayer,
-                          toggleDead: togglePlayerDead,
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider()),
+                child: PlayerList(
+                  players: players,
+                  addCharacter: _addCharacter,
+                  removeCharacter: _removeCharacter,
+                  toggleDead: _toggleDead,
+                )
               ),
             ),
             Container(
@@ -155,9 +149,9 @@ class _NotebookPageState extends State<NotebookPage> {
                   totalTownsfolk: Script.getBaseTownsfolkCount(players.length),
                   totalOutsiders: Script.getBaseOutsiderCount(players.length),
                   totalMinions: Script.getBaseMinionCount(players.length),
-                  getAlignmentCount: getAlignmentCount,
-                  getCategoryCount: getCategoryCount,
-                  getCharacterCount: getCharacterCount,
+                  getAlignmentCount: _getAlignmentCount,
+                  getCategoryCount: _getCategoryCount,
+                  getCharacterCount: _getCharacterCount,
                 )),
           ],
         ),
