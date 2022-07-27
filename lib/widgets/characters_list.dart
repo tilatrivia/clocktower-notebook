@@ -11,6 +11,7 @@ class CharactersList extends StatelessWidget {
   final Function(Alignment) getAlignmentCount;
   final Function(Category) getCategoryCount;
   final Function(Tile) getCharacterCount;
+  final ScrollController scrollController;
 
   const CharactersList(
       {Key? key,
@@ -20,12 +21,14 @@ class CharactersList extends StatelessWidget {
       required this.totalMinions,
       required this.getAlignmentCount,
       required this.getCategoryCount,
-      required this.getCharacterCount})
+      required this.getCharacterCount,
+      required this.scrollController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: scrollController,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(

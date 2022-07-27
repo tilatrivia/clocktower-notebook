@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:clocktower_notes/players.dart';
 import 'package:clocktower_notes/widgets/characters_list.dart';
@@ -24,9 +25,15 @@ class NotebookPage extends StatefulWidget {
 class _NotebookPageState extends State<NotebookPage> {
   late List<Player> players = [];
 
+  late ScrollController playersScrollController;
+  late ScrollController charactersScrollController;
+
   @override
   void initState() {
     super.initState();
+
+    playersScrollController = ScrollController();
+    charactersScrollController = ScrollController();
 
     Timer.run(() {
       debugPrint(widget.lastPlayers.toString());
@@ -127,22 +134,42 @@ class _NotebookPageState extends State<NotebookPage> {
             ),
           ],
         ),
-        body: Column(
+        body: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return _portraitLayout();
+            } else {
+              return _landscapeLayout();
+            }
+          },
+        )
+      ),
+    );
+  }
+
+  Widget _portraitLayout() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double paneHeight = min(300, constraints.maxHeight / 3);
+        final double contentHeight = constraints.maxHeight - paneHeight;
+
+        return Column(
           children: [
-            Expanded(
-              child: SizedBox(
+            Container(
+                height: contentHeight,
                 width: double.infinity,
+                color: Colors.grey.shade50,
                 child: PlayerList(
                   players: players,
                   addCharacter: _addCharacter,
                   removeCharacter: _removeCharacter,
                   toggleDead: _toggleDead,
+                  scrollController: playersScrollController,
                 )
-              ),
             ),
             Container(
+                height: paneHeight,
                 width: double.infinity,
-                height: 300,
                 color: Colors.white,
                 child: CharactersList(
                   characters: widget.script.tiles,
@@ -152,10 +179,53 @@ class _NotebookPageState extends State<NotebookPage> {
                   getAlignmentCount: _getAlignmentCount,
                   getCategoryCount: _getCategoryCount,
                   getCharacterCount: _getCharacterCount,
-                )),
+                  scrollController: charactersScrollController,
+                )
+            ),
           ],
-        ),
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _landscapeLayout() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double paneWidth = min(500, constraints.maxWidth / 2);
+        final double contentWidth = constraints.maxWidth - paneWidth;
+
+        return Row(
+          children: [
+            Container(
+                height: double.infinity,
+                width: contentWidth,
+                color: Colors.grey.shade50,
+                child: PlayerList(
+                  players: players,
+                  addCharacter: _addCharacter,
+                  removeCharacter: _removeCharacter,
+                  toggleDead: _toggleDead,
+                  scrollController: playersScrollController,
+                )
+            ),
+            Container(
+                height: double.infinity,
+                width: paneWidth,
+                color: Colors.white,
+                child: CharactersList(
+                  characters: widget.script.tiles,
+                  totalTownsfolk: Script.getBaseTownsfolkCount(players.length),
+                  totalOutsiders: Script.getBaseOutsiderCount(players.length),
+                  totalMinions: Script.getBaseMinionCount(players.length),
+                  getAlignmentCount: _getAlignmentCount,
+                  getCategoryCount: _getCategoryCount,
+                  getCharacterCount: _getCharacterCount,
+                  scrollController: charactersScrollController,
+                )
+            ),
+          ],
+        );
+      },
     );
   }
 

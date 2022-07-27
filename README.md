@@ -24,7 +24,6 @@ Version 0.2
 
 ## Version 1.0
 * App Icon
-* Landscape Mode
 * Bad Moon Rising Characters
 * Character notes
 
@@ -36,3 +35,7 @@ Version 0.2
 ## Version 1.2
 * Traveller support
 * Custom game scripts
+
+# Know Bugs
+* New game loads with old players if saved
+* Web puts x and drag point on top of one another

@@ -9,14 +9,21 @@ class PlayerList extends StatelessWidget {
   final Function(Player, Tile) addCharacter;
   final Function(Player, Tile) removeCharacter;
   final Function(Player) toggleDead;
+  final ScrollController scrollController;
 
   const PlayerList(
-      {Key? key, required this.players, required this.addCharacter, required this.removeCharacter, required this.toggleDead})
+      {Key? key,
+      required this.players,
+      required this.addCharacter,
+      required this.removeCharacter,
+      required this.toggleDead,
+      required this.scrollController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+        controller: scrollController,
         itemCount: players.length,
         itemBuilder: (context, index) {
           return PlayerContainer(
@@ -26,8 +33,6 @@ class PlayerList extends StatelessWidget {
             toggleDead: toggleDead,
           );
         },
-        separatorBuilder: (BuildContext context, int index) =>
-            const Divider()
-    );
+        separatorBuilder: (BuildContext context, int index) => const Divider());
   }
 }
