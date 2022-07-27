@@ -27,58 +27,65 @@ class CharacterTile extends StatelessWidget {
   }
 
   Widget _buildCharacterTile({required BuildContext context, required Tile tile, void Function()? onRemove, int count = 0, bool dragging = false, bool behind = false}) {
-    return GestureDetector(
-      onTap: () => showDialog(
-          context: context,
-          builder: (context) => SimpleDialog(
-              title: SizedBox(
-                width: double.infinity,
-                child: Text(tile.name,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              children: [
-                Icon(tile.character.icon,
-                  size: 64,
-                  color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 8, left: 32, right: 32),
-                  child: Text(tile.description,
-                      style: const TextStyle(fontSize: 16)
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 1, top: 1),
+      child: GestureDetector(
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => SimpleDialog(
+                title: SizedBox(
+                  width: 300,
+                  child: Text(tile.name,
+                    textAlign: TextAlign.center,
                   ),
-                )
-              ]
-          )
-      ),
-      child: Chip(
-        elevation: (dragging) ? 4 : 0,
-        backgroundColor: (behind) ? Colors.grey.shade100 : Colors.grey.shade300,
-        padding: const EdgeInsets.all(8),
-        avatar: Icon(
-          tile.character.icon,
-          color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
-          size: 24,
+                ),
+                children: [
+                  Icon(tile.character.icon,
+                    size: 64,
+                    color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
+                  ),
+                  SizedBox(
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8, left: 32, right: 32),
+                      child: Text(tile.description,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 16)
+                      ),
+                    ),
+                  )
+                ]
+            )
         ),
-        label: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              tile.name,
-              style: const TextStyle(fontSize: 20),
-            ),
-            if (count > 0)
-              Container(
-                width: 10,
-              ),
-            if (count > 0)
+        child: Chip(
+          elevation: (dragging) ? 4 : 0,
+          backgroundColor: (behind) ? Colors.grey.shade100 : Colors.grey.shade300,
+          padding: const EdgeInsets.all(8),
+          avatar: Icon(
+            tile.character.icon,
+            color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
+            size: 24,
+          ),
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Text(
-                  count.toString()
-              )
-          ],
+                tile.name,
+                style: const TextStyle(fontSize: 20),
+              ),
+              if (count > 0)
+                Container(
+                  width: 10,
+                ),
+              if (count > 0)
+                Text(
+                    count.toString()
+                )
+            ],
+          ),
+          deleteIcon: const Icon(Icons.close),
+          onDeleted: (onRemove != null) ? () => { if (!behind) onRemove() } : null,
         ),
-        deleteIcon: const Icon(Icons.close),
-        onDeleted: (onRemove != null) ? () => { if (!behind) onRemove() } : null,
       ),
     );
   }

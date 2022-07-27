@@ -87,6 +87,7 @@ class _PlayersPageState extends State<PlayersPage> {
             Expanded(
               child: ReorderableListView(
                 scrollController: scrollController,
+                buildDefaultDragHandles: false,
                 onReorder: _reorderPlayers,
                 children: [
                   for (int i = 0; i < players.length; i++)
@@ -96,6 +97,16 @@ class _PlayersPageState extends State<PlayersPage> {
                         padding: const EdgeInsets.all(8),
                         child: Row(
                           children: [
+                            ReorderableDragStartListener(
+                                index: i,
+                                child: const Icon(
+                                  Icons.reorder,
+                                  color: Colors.black26,
+                                )
+                            ),
+                            const SizedBox(
+                              width: 8
+                            ),
                             Text(players.elementAt(i).name,
                               style: const TextStyle(fontSize: 24),
                             ),

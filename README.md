@@ -37,4 +37,4 @@ Version 0.2
 * Custom game scripts
 
 # Know Bugs
-* Web puts x and drag point on top of one another
+* Chips in Wrap will have different vertical padding due to larger touch target on touch platforms vs web. [Flutter Issue on Github](https://github.com/flutter/flutter/issues/67797)
