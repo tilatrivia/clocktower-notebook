@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:clocktower_notes/players.dart';
 import 'package:clocktower_notes/widgets/character_tile.dart';
 import 'package:flutter/material.dart' hide Alignment;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/player.dart';
 import 'model/script.dart';
@@ -10,8 +12,9 @@ import 'model/tile.dart';
 
 class NotebookPage extends StatefulWidget {
   final Script script;
+  final List<Player>? lastPlayers;
 
-  const NotebookPage({Key? key, required this.script}) : super(key: key);
+  const NotebookPage({Key? key, required this.script, this.lastPlayers}) : super(key: key);
 
   @override
   State<NotebookPage> createState() => _NotebookPageState();
@@ -20,22 +23,58 @@ class NotebookPage extends StatefulWidget {
 class _NotebookPageState extends State<NotebookPage> {
   late List<Player> players = [];
 
+  @override
+  void initState() {
+    super.initState();
+
+    Timer.run(() {
+      debugPrint(widget.lastPlayers.toString());
+      if (widget.lastPlayers != null) {
+        debugPrint("Loading Previous Players");
+        setState(() {
+          players.addAll(widget.lastPlayers!);
+        });
+      } else {
+        debugPrint("No Players, opening dialog");
+        _awaitPlayerInfo();
+      }
+    });
+  }
+  
+  void _storePlayers() async {
+    debugPrint("Updating Store...");
+    String playersJSON = jsonEncode(players);
+    debugPrint(playersJSON);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(Player.playersKey, playersJSON);
+  }
+
+  void _clearStore() async {
+    debugPrint("Clearing Store...");
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(Player.playersKey);
+    await prefs.remove(Script.scriptKey);
+  }
+
   void addToPlayer(Player player, Tile tile) {
     setState(() {
       player.characters.add(tile);
     });
+    _storePlayers();
   }
 
   void removeFromPlayer(Player player, Tile tile) {
     setState(() {
       player.characters.remove(tile);
     });
+    _storePlayers();
   }
 
   void togglePlayerDead(Player player) {
     setState(() {
       player.dead = !player.dead;
     });
+    _storePlayers();
   }
 
   int getCharacterCount(Tile tile) {
@@ -63,21 +102,13 @@ class _NotebookPageState extends State<NotebookPage> {
                 : playerPrev));
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    Timer.run(() {
-      _awaitPlayerInfo();
-    });
-  }
-
   void _awaitPlayerInfo() async {
     List<Player> receivedPlayers = await Navigator.push(
         context, MaterialPageRoute(builder: (_) => const PlayersPage()));
     setState(() {
       players = receivedPlayers;
     });
+    _storePlayers();
   }
 
   @override
@@ -188,7 +219,7 @@ class _NotebookPageState extends State<NotebookPage> {
                               width: 8,
                             ),
                             Text(
-                              "${getCategoryCount(Category.outsider).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              "${getCategoryCount(Category.outsider).toString()}/${Script.getBaseOutsiderCount(players.length)}",
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -220,7 +251,7 @@ class _NotebookPageState extends State<NotebookPage> {
                               width: 8,
                             ),
                             Text(
-                              "${getCategoryCount(Category.minion).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              "${getCategoryCount(Category.minion).toString()}/${Script.getBaseMinionCount(players.length)}",
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -252,7 +283,7 @@ class _NotebookPageState extends State<NotebookPage> {
                               width: 8,
                             ),
                             Text(
-                              "${getCategoryCount(Category.demon).toString()}/${Script.getBaseTownsfolkCount(players.length)}",
+                              "${getCategoryCount(Category.demon).toString()}/1",
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -294,6 +325,7 @@ class _NotebookPageState extends State<NotebookPage> {
                         child: const Text("CANCEL")),
                     TextButton(
                         onPressed: () {
+                          _clearStore();
                           Navigator.of(context).pop(true);
                           Navigator.of(context).pop();
                         },

@@ -1,3 +1,4 @@
+import 'package:clocktower_notes/model/characters.dart';
 import 'package:flutter/material.dart' hide Alignment;
 import '../model/tile.dart';
 
@@ -37,7 +38,7 @@ class CharacterTile extends StatelessWidget {
                 ),
               ),
               children: [
-                Icon(tile.icon,
+                Icon(tile.character.icon,
                   size: 64,
                   color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
                 ),
@@ -55,7 +56,7 @@ class CharacterTile extends StatelessWidget {
         backgroundColor: (behind) ? Colors.grey.shade100 : Colors.grey.shade300,
         padding: const EdgeInsets.all(8),
         avatar: Icon(
-          tile.icon,
+          tile.character.icon,
           color: (tile.alignment == Alignment.good) ? Colors.blue : Colors.red,
           size: 24,
         ),

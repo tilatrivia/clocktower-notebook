@@ -10,7 +10,7 @@ class PlayersPage extends StatefulWidget {
 }
 
 class _PlayersPageState extends State<PlayersPage> {
-  final List<Player> players = [
+  final List<Player> players = [ // TODO: Remove extra players
     Player("Myself"),
     Player("Player 1"),
     Player("Player 2"),

@@ -18,14 +18,15 @@ Version 0.2
 * Drag and drop character tiles onto players
 * Mark players as dead
 * View totals for each alignment, character type, and individual character
+* Notes are saved when the app closes for continuing later
 
 # Future Features
 
 ## Version 1.0
+* App Icon
 * Landscape Mode
 * Bad Moon Rising Characters
 * Character notes
-* Data persistence
 
 ## Version 1.1
 * Character specific information notes
