@@ -101,6 +101,7 @@ class _PlayersPageState extends State<PlayersPage> {
                                 index: i,
                                 child: const Icon(
                                   Icons.reorder,
+                                  size: 32,
                                   color: Colors.black26,
                                 )
                             ),
