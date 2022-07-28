@@ -25,7 +25,6 @@ Version 0.2
 ## Future Features
 
 ### Version 1.0
-* Switch to single parameter character system
 * Bad Moon Rising Characters
 * App Icon
 
@@ -42,4 +41,4 @@ Version 0.2
 * Chips in Wrap will have different vertical padding due to larger touch target on touch platforms vs web. [Flutter Issue on Github](https://github.com/flutter/flutter/issues/67797)
 
 ## Disclaimer
-The rules and characters of the game Blood on the Clocktower are intellectual property of Steven Medway and The Pandemonium Institute. I do not claim to own them. I do claim ownership of the app's format and design, as it pertains to the GLP-3.0 Licence.
+The rules and characters of the game Blood on the Clocktower are intellectual property of Steven Medway and The Pandemonium Institute. I do not claim to own them. I do claim ownership of the app's format and design, as it pertains to the licence.

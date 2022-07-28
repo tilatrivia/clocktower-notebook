@@ -1,5 +1,6 @@
 import 'package:clocktower_notes/model/icons.dart';
 import 'package:clocktower_notes/notebook.dart';
+import 'package:clocktower_notes/widgets/main_option.dart';
 import 'package:flutter/material.dart';
 
 import 'data/store.dart';
@@ -78,101 +79,156 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Clocktower Notes"),
       ),
-      body: Center(
-        child: SizedBox(
-          width: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                "New Game",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
-              ),
-              Container(
-                height: 8,
-              ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          ClocktowerColors.scriptTroubleBrewing.data)),
-                  onPressed: () => _startNewGame(Script.troubleBrewing()),
-                  child: const Text(
-                    "Trouble Brewing",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  )),
-              Container(
-                height: 8,
-              ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          ClocktowerColors.scriptSectsAndViolets.data)),
-                  onPressed: () => _startNewGame(Script.sectsAndViolets()),
-                  child: const Text(
-                    "Sects and Violets",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  )),
-              Container(
-                height: 8,
-              ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          ClocktowerColors.scriptBadMoonRising.data)),
-                  onPressed: () => _startNewGame(Script.badMoodRising()),
-                  child: const Text(
-                    "Bad Moon Rising",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  )),
-              Container(
-                height: 32,
-              ),
-              const Text(
-                "Existing Game",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
-              ),
-              Container(
-                height: 8,
-              ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          const EdgeInsets.all(12)),
-                      backgroundColor: (lastGame != null)
-                          ? MaterialStateProperty.all<Color>(
-                              Colors.green.shade900)
-                          : MaterialStateProperty.all<Color>(
-                              Colors.grey.shade400)),
-                  onPressed: () {
-                    if (lastGame != null) {
-                      _startExistingGame();
-                    }
-                  },
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  )),
-            ],
+      body: Flex(
+        direction: Axis.vertical,
+        children: [
+          Expanded(
+            child: MainOption(
+              icon: ClocktowerIcons.scriptTroubleBrewing.data,
+              iconColor: ClocktowerColors.scriptTroubleBrewing.data,
+              title: "Trouble Brewing",
+              subtitle: "New Game",
+              onPressed: () => _startNewGame(Script.troubleBrewing()),
+            ),
           ),
-        ),
-      ),
+          Container(
+            height: 0.5,
+            color: Colors.black12
+          ),
+          Expanded(
+            child: MainOption(
+              icon: ClocktowerIcons.scriptSectsAndViolets.data,
+              iconColor: ClocktowerColors.scriptSectsAndViolets.data,
+              title: "Sects And Violets",
+              subtitle: "New Game",
+              onPressed: () => _startNewGame(Script.sectsAndViolets()),
+            ),
+          ),
+          Container(
+              height: 0.5,
+              color: Colors.black12
+          ),
+          Expanded(
+            child: MainOption(
+              icon: ClocktowerIcons.scriptBadMoodRising.data,
+              iconColor: ClocktowerColors.scriptBadMoonRising.data,
+              title: "Bad Moon Rising",
+              subtitle: "New Game",
+              onPressed: () => _startNewGame(Script.badMoodRising()),
+            ),
+          ),
+          Container(
+              height: 0.5,
+              color: Colors.black12
+          ),
+          Expanded(
+            child: MainOption(
+              icon: Icons.save_outlined,
+              iconColor: Colors.blueGrey,
+              title: "Previous Game",
+              subtitle: (lastGame != null) ? "Script: ${lastGame?.script.name} Players: ${lastGame?.players.length}" : "No Game Saved",
+              onPressed: () => _startExistingGame(),
+              enabled: lastGame != null,
+            ),
+          ),
+        ],
+      )
+
+      // Center(
+      //   child: SizedBox(
+      //     width: 300,
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       crossAxisAlignment: CrossAxisAlignment.stretch,
+      //       children: [
+      //         const Text(
+      //           "New Game",
+      //           textAlign: TextAlign.center,
+      //           style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+      //         ),
+      //         Container(
+      //           height: 8,
+      //         ),
+      //         ElevatedButton(
+      //             style: ButtonStyle(
+      //                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      //                     const EdgeInsets.all(12)),
+      //                 backgroundColor: MaterialStateProperty.all<Color>(
+      //                     ClocktowerColors.scriptTroubleBrewing.data)),
+      //             onPressed: () => _startNewGame(Script.troubleBrewing()),
+      //             child: const Text(
+      //               "Trouble Brewing",
+      //               style: TextStyle(
+      //                 fontSize: 24,
+      //               ),
+      //             )),
+      //         Container(
+      //           height: 8,
+      //         ),
+      //         ElevatedButton(
+      //             style: ButtonStyle(
+      //                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      //                     const EdgeInsets.all(12)),
+      //                 backgroundColor: MaterialStateProperty.all<Color>(
+      //                     ClocktowerColors.scriptSectsAndViolets.data)),
+      //             onPressed: () => _startNewGame(Script.sectsAndViolets()),
+      //             child: const Text(
+      //               "Sects and Violets",
+      //               style: TextStyle(
+      //                 fontSize: 24,
+      //               ),
+      //             )),
+      //         Container(
+      //           height: 8,
+      //         ),
+      //         ElevatedButton(
+      //             style: ButtonStyle(
+      //                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      //                     const EdgeInsets.all(12)),
+      //                 backgroundColor: MaterialStateProperty.all<Color>(
+      //                     ClocktowerColors.scriptBadMoonRising.data)),
+      //             onPressed: () => _startNewGame(Script.badMoodRising()),
+      //             child: const Text(
+      //               "Bad Moon Rising",
+      //               style: TextStyle(
+      //                 fontSize: 24,
+      //               ),
+      //             )),
+      //         Container(
+      //           height: 32,
+      //         ),
+      //         const Text(
+      //           "Existing Game",
+      //           textAlign: TextAlign.center,
+      //           style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+      //         ),
+      //         Container(
+      //           height: 8,
+      //         ),
+      //         ElevatedButton(
+      //             style: ButtonStyle(
+      //                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      //                     const EdgeInsets.all(12)),
+      //                 backgroundColor: (lastGame != null)
+      //                     ? MaterialStateProperty.all<Color>(
+      //                         Colors.green.shade900)
+      //                     : MaterialStateProperty.all<Color>(
+      //                         Colors.grey.shade400)),
+      //             onPressed: () {
+      //               if (lastGame != null) {
+      //                 _startExistingGame();
+      //               }
+      //             },
+      //             child: const Text(
+      //               "Continue",
+      //               style: TextStyle(
+      //                 fontSize: 24,
+      //               ),
+      //             )),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
