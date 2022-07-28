@@ -1,14 +1,13 @@
-import 'package:clocktower_notes/model/tile.dart';
+import 'package:clocktower_notes/model/character.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'player.g.dart';
 
 @JsonSerializable()
 class Player {
-  static const String playersKey = "players";
 
   final String name;
-  Set<Tile> characters;
+  Set<CharacterId> characters;
   String note;
   bool dead;
 

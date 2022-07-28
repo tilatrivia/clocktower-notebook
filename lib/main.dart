@@ -1,10 +1,9 @@
-import 'dart:convert';
-
+import 'package:clocktower_notes/model/icons.dart';
 import 'package:clocktower_notes/notebook.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'model/player.dart';
+import 'data/store.dart';
+import 'model/game.dart';
 import 'model/script.dart';
 
 void main() {
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Clocktower Notebook',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: const HomePage(),
     );
@@ -35,21 +34,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Script? lastScript;
-  List<Player>? lastPlayers;
+  Game? lastGame;
 
   void _startNewGame(Script script) {
-    _clearPlayers();
-    _storeScript(script);
-    _awaitNavigatorPage(script: script);
+    Store.clearGame();
+    _awaitNotebookPage(Game.withScript(script));
   }
 
   void _startExistingGame() {
-    _awaitNavigatorPage(script: lastScript!, lastPlayers: lastPlayers);
+    _awaitNotebookPage(lastGame!);
   }
 
-  void _awaitNavigatorPage({required Script script, List<Player>? lastPlayers}) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotebookPage(script: script, lastPlayers: lastPlayers)));
+  void _awaitNotebookPage(Game lastGame) async {
+    await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => NotebookPage(game: lastGame)));
     _checkStore();
   }
 
@@ -60,34 +58,16 @@ class _HomePageState extends State<HomePage> {
     _checkStore();
   }
 
-  void _clearPlayers() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(Player.playersKey);
-  }
-
-  void _storeScript(Script script) async {
-    final scriptJSON = jsonEncode(script);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(Script.scriptKey, scriptJSON);
-  }
-
   void _checkStore() async {
-    final prefs = await SharedPreferences.getInstance();
-    final scriptJSON = prefs.getString(Script.scriptKey);
-    final playersJSON = prefs.getString(Player.playersKey);
+    final Game? retrievedGame = await Store.getGame();
 
-    if (scriptJSON != null && playersJSON != null) {
-      final Script script = Script.fromJson(jsonDecode(scriptJSON));
-      final List<Player> players = (json.decode(playersJSON) as List).map((i) =>
-          Player.fromJson(i)).toList();
+    if (retrievedGame != null) {
       setState(() {
-        lastScript = script;
-        lastPlayers = players;
+        lastGame = retrievedGame;
       });
     } else {
       setState(() {
-        lastScript = null;
-        lastPlayers = null;
+        lastGame = null;
       });
     }
   }
@@ -96,7 +76,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      title: const Text("Clocktower Notes"),
+        title: const Text("Clocktower Notes"),
       ),
       body: Center(
         child: SizedBox(
@@ -105,89 +85,90 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("New Game",
+              const Text(
+                "New Game",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800
-                ),
-              ),
-              Container(
-                height: 8,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                  backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.troubleBrewing))
-                ),
-                onPressed: () => _startNewGame(Script.troubleBrewing()),
-                child: const Text("Trouble Brewing",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                )
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
               ),
               Container(
                 height: 8,
               ),
               ElevatedButton(
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.sectsAndViolets))
-                  ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(12)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          ClocktowerColors.scriptTroubleBrewing.data)),
+                  onPressed: () => _startNewGame(Script.troubleBrewing()),
+                  child: const Text(
+                    "Trouble Brewing",
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  )),
+              Container(
+                height: 8,
+              ),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(12)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          ClocktowerColors.scriptSectsAndViolets.data)),
                   onPressed: () => _startNewGame(Script.sectsAndViolets()),
-                  child: const Text("Sects and Violets",
+                  child: const Text(
+                    "Sects and Violets",
                     style: TextStyle(
                       fontSize: 24,
                     ),
-                  )
-              ),
+                  )),
               Container(
                 height: 8,
               ),
               ElevatedButton(
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(Script.getScriptColor(Scripts.badMoonRising))
-                  ),
-                  onPressed: () => debugPrint("Bad Moon Rising"),
-                  child: const Text("Bad Moon Rising",
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(12)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          ClocktowerColors.scriptBadMoonRising.data)),
+                  onPressed: () => _startNewGame(Script.badMoodRising()),
+                  child: const Text(
+                    "Bad Moon Rising",
                     style: TextStyle(
                       fontSize: 24,
                     ),
-                  )
-              ),
+                  )),
               Container(
                 height: 32,
               ),
-              const Text("Existing Game",
+              const Text(
+                "Existing Game",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800
-                ),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
               ),
               Container(
                 height: 8,
               ),
               ElevatedButton(
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(12)),
-                      backgroundColor: (lastScript != null)
-                          ? MaterialStateProperty.all<Color>(Script.getScriptColor(lastScript!.scriptId))
-                          : MaterialStateProperty.all<Color>(Colors.grey.shade400)
-                  ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          const EdgeInsets.all(12)),
+                      backgroundColor: (lastGame != null)
+                          ? MaterialStateProperty.all<Color>(
+                              Colors.green.shade900)
+                          : MaterialStateProperty.all<Color>(
+                              Colors.grey.shade400)),
                   onPressed: () {
-                    if (lastScript != null) {
+                    if (lastGame != null) {
                       _startExistingGame();
                     }
                   },
-                  child: const Text("Continue",
+                  child: const Text(
+                    "Continue",
                     style: TextStyle(
                       fontSize: 24,
                     ),
-                  )
-              ),
+                  )),
             ],
           ),
         ),
@@ -195,5 +176,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

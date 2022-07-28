@@ -1,29 +1,29 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
+import 'package:clocktower_notes/model/icons.dart';
 import 'package:clocktower_notes/players.dart';
 import 'package:clocktower_notes/widgets/characters_list.dart';
 import 'package:clocktower_notes/widgets/player_list.dart';
-import 'package:flutter/material.dart' hide Alignment;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
+import 'data/store.dart';
+import 'model/character.dart';
+import 'model/game.dart';
 import 'model/player.dart';
 import 'model/script.dart';
-import 'model/tile.dart';
 
 class NotebookPage extends StatefulWidget {
-  final Script script;
-  final List<Player>? lastPlayers;
+  final Game game;
 
-  const NotebookPage({Key? key, required this.script, this.lastPlayers}) : super(key: key);
+  const NotebookPage({Key? key, required this.game}) : super(key: key);
 
   @override
   State<NotebookPage> createState() => _NotebookPageState();
 }
 
 class _NotebookPageState extends State<NotebookPage> {
-  late List<Player> players = [];
+  late Game game;
 
   late ScrollController playersScrollController;
   late ScrollController charactersScrollController;
@@ -33,93 +33,84 @@ class _NotebookPageState extends State<NotebookPage> {
   void initState() {
     super.initState();
 
+    game = widget.game;
+    Store.updateGame(game);
+
     playersScrollController = ScrollController();
     charactersScrollController = ScrollController();
     textEditingController = TextEditingController();
 
     Timer.run(() {
-      if (widget.lastPlayers != null) {
-        setState(() {
-          players.addAll(widget.lastPlayers!);
-        });
-      } else {
+      if (game.players.isEmpty) {
         _awaitPlayerInfo();
       }
     });
   }
-  
-  void _storePlayers() async {
-    String playersJSON = jsonEncode(players);
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(Player.playersKey, playersJSON);
-  }
 
-  void _clearStore() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(Player.playersKey);
-    await prefs.remove(Script.scriptKey);
-  }
-
-  void _addCharacter(Player player, Tile tile) {
+  void _addCharacter(Player player, CharacterId characterId) {
     setState(() {
-      player.characters.add(tile);
+      player.characters.add(characterId);
     });
-    _storePlayers();
+    Store.updateGame(game);
   }
 
-  void _removeCharacter(Player player, Tile tile) {
+  void _removeCharacter(Player player, CharacterId characterId) {
     setState(() {
-      player.characters.remove(tile);
+      player.characters.remove(characterId);
     });
-    _storePlayers();
+    Store.updateGame(game);
   }
 
   void _toggleDead(Player player) {
     setState(() {
       player.dead = !player.dead;
     });
-    _storePlayers();
+    Store.updateGame(game);
   }
 
   void _updateNote(Player player, String note) {
     setState(() {
       player.note = note;
     });
-    _storePlayers();
+    Store.updateGame(game);
   }
 
-  int _getCharacterCount(Tile tile) {
-    return players.fold(0,
-        (prev, player) => (player.characters.contains(tile)) ? prev + 1 : prev);
+  int _getCharacterCount(CharacterId characterId) {
+    return game.players.fold(
+        0,
+        (prev, player) =>
+            (player.characters.contains(characterId)) ? prev + 1 : prev);
   }
 
-  int _getCategoryCount(Category category) {
-    return players.fold(
+  int _getCategoryCount(CharacterType type) {
+    return game.players.fold(
         0,
         (prev, player) => player.characters.fold(
             prev,
-            (playerPrev, character) => (character.category == category)
-                ? playerPrev + 1
-                : playerPrev));
+            (playerPrev, characterId) =>
+                (game.script.getById(characterId).type == type)
+                    ? playerPrev + 1
+                    : playerPrev));
   }
 
-  int _getAlignmentCount(Alignment alignment) {
-    return players.fold(
+  int _getAlignmentCount(CharacterAlignment alignment) {
+    return game.players.fold(
         0,
         (prev, player) => player.characters.fold(
             prev,
-            (playerPrev, character) => (character.alignment == alignment)
-                ? playerPrev + 1
-                : playerPrev));
+            (playerPrev, characterId) =>
+                (game.script.getById(characterId).alignment == alignment)
+                    ? playerPrev + 1
+                    : playerPrev));
   }
 
   void _awaitPlayerInfo() async {
     List<Player> receivedPlayers = await Navigator.push(
         context, MaterialPageRoute(builder: (_) => const PlayersPage()));
     setState(() {
-      players = receivedPlayers;
+      game.players.addAll(receivedPlayers);
     });
-    _storePlayers();
+    Store.updateGame(game);
   }
 
   @override
@@ -127,31 +118,29 @@ class _NotebookPageState extends State<NotebookPage> {
     return WillPopScope(
       onWillPop: _confirmExit,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Script.getScriptColor(widget.script.scriptId),
-          automaticallyImplyLeading: false,
-          title:
-              Text("${Script.getScriptTitle(widget.script.scriptId)} Notebook"),
-          actions: [
-            TextButton(
-              onPressed: _confirmExit,
-              child: const Text(
-                "END GAME",
-                style: TextStyle(color: Colors.white),
+          appBar: AppBar(
+            backgroundColor: game.script.color.data,
+            automaticallyImplyLeading: false,
+            title: Text("${game.script.name} Notebook"),
+            actions: [
+              TextButton(
+                onPressed: _confirmExit,
+                child: const Text(
+                  "END GAME",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            ),
-          ],
-        ),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth < 600) {
-              return _portraitLayout();
-            } else {
-              return _landscapeLayout();
-            }
-          },
-        )
-      ),
+            ],
+          ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return _portraitLayout();
+              } else {
+                return _landscapeLayout();
+              }
+            },
+          )),
     );
   }
 
@@ -168,31 +157,29 @@ class _NotebookPageState extends State<NotebookPage> {
                 width: double.infinity,
                 color: Colors.grey.shade50,
                 child: PlayerList(
-                  context: context,
-                  players: players,
-                  addCharacter: _addCharacter,
-                  removeCharacter: _removeCharacter,
-                  toggleDead: _toggleDead,
-                  updateNote: _updateNote,
-                  scrollController: playersScrollController,
-                  textEditingController: textEditingController
-                )
-            ),
+                    context: context,
+                    players: game.players,
+                    getCharacter: game.script.getById,
+                    addCharacter: _addCharacter,
+                    removeCharacter: _removeCharacter,
+                    toggleDead: _toggleDead,
+                    updateNote: _updateNote,
+                    scrollController: playersScrollController,
+                    textEditingController: textEditingController)),
             Container(
                 height: paneHeight,
                 width: double.infinity,
                 color: Colors.white,
                 child: CharactersList(
-                  characters: widget.script.tiles,
-                  totalTownsfolk: Script.getBaseTownsfolkCount(players.length),
-                  totalOutsiders: Script.getBaseOutsiderCount(players.length),
-                  totalMinions: Script.getBaseMinionCount(players.length),
+                  characters: game.script.characters.values.toList(),
+                  totalTownsfolk: Script.getBaseTownsfolkCount(game.players.length),
+                  totalOutsiders: Script.getBaseOutsiderCount(game.players.length),
+                  totalMinions: Script.getBaseMinionCount(game.players.length),
                   getAlignmentCount: _getAlignmentCount,
                   getCategoryCount: _getCategoryCount,
                   getCharacterCount: _getCharacterCount,
                   scrollController: charactersScrollController,
-                )
-            ),
+                )),
           ],
         );
       },
@@ -213,30 +200,28 @@ class _NotebookPageState extends State<NotebookPage> {
                 color: Colors.grey.shade50,
                 child: PlayerList(
                     context: context,
-                    players: players,
+                    players: game.players,
+                    getCharacter: game.script.getById,
                     addCharacter: _addCharacter,
                     removeCharacter: _removeCharacter,
                     toggleDead: _toggleDead,
                     updateNote: _updateNote,
                     scrollController: playersScrollController,
-                    textEditingController: textEditingController
-                )
-            ),
+                    textEditingController: textEditingController)),
             Container(
                 height: double.infinity,
                 width: paneWidth,
                 color: Colors.white,
                 child: CharactersList(
-                  characters: widget.script.tiles,
-                  totalTownsfolk: Script.getBaseTownsfolkCount(players.length),
-                  totalOutsiders: Script.getBaseOutsiderCount(players.length),
-                  totalMinions: Script.getBaseMinionCount(players.length),
+                  characters: game.script.characters.values.toList(),
+                  totalTownsfolk: Script.getBaseTownsfolkCount(game.players.length),
+                  totalOutsiders: Script.getBaseOutsiderCount(game.players.length),
+                  totalMinions: Script.getBaseMinionCount(game.players.length),
                   getAlignmentCount: _getAlignmentCount,
                   getCategoryCount: _getCategoryCount,
                   getCharacterCount: _getCharacterCount,
                   scrollController: charactersScrollController,
-                )
-            ),
+                )),
           ],
         );
       },
@@ -256,7 +241,7 @@ class _NotebookPageState extends State<NotebookPage> {
                         child: const Text("CANCEL")),
                     TextButton(
                         onPressed: () {
-                          _clearStore();
+                          Store.clearGame();
                           Navigator.of(context).pop(true);
                           Navigator.of(context).pop();
                         },

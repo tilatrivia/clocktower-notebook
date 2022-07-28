@@ -1,22 +1,24 @@
+import 'package:clocktower_notes/model/character.dart';
 import 'package:clocktower_notes/widgets/character_tile.dart';
 import 'package:flutter/material.dart';
 
 import '../model/player.dart';
-import '../model/tile.dart';
 
 class PlayerContainer extends StatelessWidget {
   final BuildContext context;
   final Player player;
-  final Function(Player, Tile) addCharacter;
-  final Function(Player, Tile) removeCharacter;
-  final Function(Player) toggleDead;
-  final Function(Player, String) updateNote;
+  final List<Character> characters;
+  final void Function(Player, CharacterId) addCharacter;
+  final void Function(Player, CharacterId) removeCharacter;
+  final void Function(Player) toggleDead;
+  final void Function(Player, String) updateNote;
   final TextEditingController textEditingController;
 
   const PlayerContainer({
         Key? key,
         required this.context,
         required this.player,
+        required this.characters,
         required this.addCharacter,
         required this.removeCharacter,
         required this.toggleDead,
@@ -26,7 +28,7 @@ class PlayerContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<Tile>(
+    return DragTarget<CharacterId>(
         builder: (context, candidates, rejects) {
           return Container(
             padding: const EdgeInsets.all(8),
@@ -58,11 +60,11 @@ class PlayerContainer extends StatelessWidget {
                 ),
                 Wrap(
                   spacing: 8,
-                  children: player.characters
-                      .map((tile) =>
+                  children: characters
+                      .map((c) =>
                       CharacterTile(
-                          tile: tile,
-                          onRemove: () => removeCharacter(player, tile)))
+                          character: c,
+                          onRemove: () => removeCharacter(player, c.characterId)))
                       .toList(),
                 ),
                 if (player.note.isNotEmpty)
