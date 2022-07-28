@@ -130,10 +130,10 @@ extension CharactersExt on ClocktowerIcons {
       case ClocktowerIcons.characterSaint: return Icons.auto_awesome_outlined;
       case ClocktowerIcons.characterPoisoner: return Icons.science_outlined;
       case ClocktowerIcons.characterSpy: return Icons.visibility_outlined;
-      case ClocktowerIcons.characterScarlettWoman: return Icons.school_outlined;
-      case ClocktowerIcons.characterBaron: return Icons.woman_outlined;
+      case ClocktowerIcons.characterScarlettWoman: return Icons.woman_outlined;
+      case ClocktowerIcons.characterBaron: return Icons.school_outlined;
       case ClocktowerIcons.characterImp: return Icons.call_split_outlined;
-      case ClocktowerIcons.characterClockmaker: return Icons.school_outlined;
+      case ClocktowerIcons.characterClockmaker: return Icons.schedule_outlined;
       case ClocktowerIcons.characterDreamer: return Icons.hourglass_empty_outlined;
       case ClocktowerIcons.characterSnakeCharmer: return Icons.polymer_outlined;
       case ClocktowerIcons.characterMathematician: return Icons.calculate_outlined;
