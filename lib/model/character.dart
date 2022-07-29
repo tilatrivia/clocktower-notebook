@@ -274,7 +274,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterClockmaker,
-            description: "Description");
+            description: "You start knowing how many steps from the Demon to its nearest Minion.");
       case CharacterId.dreamer:
         return const Character(
             characterId: CharacterId.dreamer,
@@ -283,7 +283,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterDreamer,
-            description: "Description");
+            description: "Each night, choose a player (not yourself or Travellers): you learn 1 good & 1 evil character, 1 of which is correct.");
       case CharacterId.snakeCharmer:
         return const Character(
             characterId: CharacterId.snakeCharmer,
@@ -292,7 +292,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterSnakeCharmer,
-            description: "Description");
+            description: "Each night, choose an alive player: a chosen Demon swaps characters & alignments with you & is then poisoned.");
       case CharacterId.mathematician:
         return const Character(
             characterId: CharacterId.mathematician,
@@ -301,7 +301,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterMathematician,
-            description: "Description");
+            description: "Each night, you learn how many players' abilities worked abnormally (since dawn) due to another character's ability.");
       case CharacterId.flowergirl:
         return const Character(
             characterId: CharacterId.flowergirl,
@@ -310,7 +310,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterFlowergirl,
-            description: "Description");
+            description: "Each night except for the first, you learn if a Demon voted today.");
       case CharacterId.townCrier:
         return const Character(
             characterId: CharacterId.townCrier,
@@ -319,7 +319,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterTownCrier,
-            description: "Description");
+            description: "Each night except for the first, you learn if a Minion nominated today.");
       case CharacterId.oracle:
         return const Character(
             characterId: CharacterId.oracle,
@@ -328,7 +328,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterOracle,
-            description: "Description");
+            description: "Each night except for the first, you learn how many dead players are evil.");
       case CharacterId.savant:
         return const Character(
             characterId: CharacterId.savant,
@@ -337,7 +337,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterSavant,
-            description: "Description");
+            description: "Each day, you may visit the Storyteller to learn 2 things in private: 1 is true & 1 is false.");
       case CharacterId.seamstress:
         return const Character(
             characterId: CharacterId.seamstress,
@@ -346,7 +346,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterSeamstress,
-            description: "Description");
+            description: "Once per game, at night, choose 2 players (not yourself): you learn if they are the same alignment.");
       case CharacterId.philosopher:
         return const Character(
             characterId: CharacterId.philosopher,
@@ -355,7 +355,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterPhilosopher,
-            description: "Description");
+            description: "Once per game, at night, choose a good character: gain that ability. If this character is in play, they are drunk.");
       case CharacterId.artist:
         return const Character(
             characterId: CharacterId.artist,
@@ -364,7 +364,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterArtist,
-            description: "Description");
+            description: "Once per game, during the day, privately ask the Storyteller any yes/no question.");
       case CharacterId.juggler:
         return const Character(
             characterId: CharacterId.juggler,
@@ -373,7 +373,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterJuggler,
-            description: "Description");
+            description: "On your 1st day, publicly guess up to 5 players' characters. That night, you learn how many you got correct.");
       case CharacterId.sage:
         return const Character(
             characterId: CharacterId.sage,
@@ -382,7 +382,7 @@ class Character {
             type: CharacterType.townsfolk,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterSage,
-            description: "Description");
+            description: "If the Demon kills you, you learn that it is 1 of 2 players.");
       case CharacterId.mutant:
         return const Character(
             characterId: CharacterId.mutant,
@@ -391,7 +391,7 @@ class Character {
             type: CharacterType.outsider,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterMutant,
-            description: "Description");
+            description: "If you are \"mad\" about being an Outsider, you might be executed.");
       case CharacterId.sweetheart:
         return const Character(
             characterId: CharacterId.sweetheart,
@@ -400,7 +400,7 @@ class Character {
             type: CharacterType.outsider,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterSweetheart,
-            description: "Description");
+            description: "When you die, 1 player is drunk from now on.");
       case CharacterId.barber:
         return const Character(
             characterId: CharacterId.barber,
@@ -409,7 +409,7 @@ class Character {
             type: CharacterType.outsider,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterBarber,
-            description: "Description");
+            description: "If you died today or tonight, the Demon may choose 2 players (not another Demon) to swap characters.");
       case CharacterId.klutz:
         return const Character(
             characterId: CharacterId.klutz,
@@ -418,7 +418,7 @@ class Character {
             type: CharacterType.outsider,
             alignment: CharacterAlignment.good,
             icon: ClocktowerIcons.characterKlutz,
-            description: "Description");
+            description: "When you learn that you died, publicly choose 1 alive player: if they are evil, your team loses.");
       case CharacterId.evilTwin:
         return const Character(
             characterId: CharacterId.evilTwin,
@@ -427,7 +427,7 @@ class Character {
             type: CharacterType.minion,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterEvilTwin,
-            description: "Description");
+            description: "You & an opposing player know each other. If the good player is executed, evil wins. Good can't win if you both live.");
       case CharacterId.witch:
         return const Character(
             characterId: CharacterId.witch,
@@ -436,7 +436,7 @@ class Character {
             type: CharacterType.minion,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterWitch,
-            description: "Description");
+            description: "Each night, choose a player: if they nominate tomorrow, they die. If just 3 players live, you lose this ability.");
       case CharacterId.cerenovus:
         return const Character(
             characterId: CharacterId.cerenovus,
@@ -445,7 +445,7 @@ class Character {
             type: CharacterType.minion,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterCerenovus,
-            description: "Description");
+            description: "Each night, choose a player & a good character: they are \"mad\" they are this character tomorrow, or might be executed.");
       case CharacterId.pitHag:
         return const Character(
             characterId: CharacterId.pitHag,
@@ -454,7 +454,7 @@ class Character {
             type: CharacterType.minion,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterPitHag,
-            description: "Description");
+            description: "Each night except for the first, choose a player & a character they become (if not in play). If a Demon is made, deaths tonight are arbitrary.");
       case CharacterId.fangGu:
         return const Character(
             characterId: CharacterId.fangGu,
@@ -463,7 +463,7 @@ class Character {
             type: CharacterType.demon,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterFangGu,
-            description: "Description");
+            description: "Each night except for the first, choose a player: they die. The 1st Outsider this kills becomes an evil Fang Gu & you die instead. [+1 Outsider]");
       case CharacterId.vigormortis:
         return const Character(
             characterId: CharacterId.vigormortis,
@@ -472,7 +472,7 @@ class Character {
             type: CharacterType.demon,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterVigormortis,
-            description: "Description");
+            description: "Each night except for the first, choose a player: they die. Minions you kill keep their ability & poison 1 Townsfolk neighbor. [-1 Outsider]");
       case CharacterId.noDashii:
         return const Character(
             characterId: CharacterId.noDashii,
@@ -481,7 +481,7 @@ class Character {
             type: CharacterType.demon,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterNoDashii,
-            description: "Description");
+            description: "Each night except for the first, choose a player: they die. Your 2 Townsfolk neighbours are poisoned.");
       case CharacterId.vortox:
         return const Character(
             characterId: CharacterId.vortox,
@@ -490,7 +490,7 @@ class Character {
             type: CharacterType.demon,
             alignment: CharacterAlignment.evil,
             icon: ClocktowerIcons.characterVortox,
-            description: "Description");
+            description: "Each night except for the first, choose a player; they die. Townsfolk abilities yield false info. Each day, if no-one is executed, evil wins.");
 
       // Bad Moon Rising
       // case CharacterId.replace:
