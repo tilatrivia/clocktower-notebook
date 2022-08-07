@@ -12,17 +12,17 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   final List<Player> players = [ // TODO: Remove extra players
     Player("Myself"),
-    Player("Player 1"),
-    Player("Player 2"),
-    Player("Player 3"),
-    Player("Player 4"),
-    Player("Player 5"),
-    Player("Player 6"),
-    Player("Player 7"),
-    Player("Player 8"),
-    Player("Player 9"),
-    Player("Player 10"),
-    Player("Player 11"),
+    // Player("Player 1"),
+    // Player("Player 2"),
+    // Player("Player 3"),
+    // Player("Player 4"),
+    // Player("Player 5"),
+    // Player("Player 6"),
+    // Player("Player 7"),
+    // Player("Player 8"),
+    // Player("Player 9"),
+    // Player("Player 10"),
+    // Player("Player 11"),
   ];
   late TextEditingController textFieldController;
   final ScrollController scrollController = ScrollController();
