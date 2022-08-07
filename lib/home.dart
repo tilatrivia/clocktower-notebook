@@ -1,4 +1,5 @@
 import 'package:clocktower_notes/about.dart';
+import 'package:clocktower_notes/settings.dart';
 import 'package:clocktower_notes/widgets/main_option.dart';
 import 'package:flutter/material.dart';
 
@@ -38,9 +39,10 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(builder: (context) => const AboutPage()));
   }
 
-  void _openSettings() {
-    // Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (context) => const SettingsPage()));
+  void _openSettings() async {
+    await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const SettingsPage()));
+    _checkStore();
   }
 
   @override
