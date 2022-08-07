@@ -24,10 +24,6 @@ Version 1.0
 
 ## Future Features
 
-### Version 1.0
-* Bad Moon Rising Characters
-* App Icon
-
 ### Version 1.1
 * Character specific information notes
 * A front cover to temporarily clear your screen of all of your notes
