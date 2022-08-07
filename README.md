@@ -21,6 +21,8 @@ Version 1.0
 * View totals for each alignment, character type, and individual character
 * Keep written notes on each player
 * Notes are saved when the app closes for continuing later
+* About app screen
+* Settings screen
 
 ## Future Features
 
