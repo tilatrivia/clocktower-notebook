@@ -38,5 +38,5 @@ jobs:
         with:
           args: deploy --only hosting --public web-build
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOCKTOWER_NOTEBOOK }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: default
