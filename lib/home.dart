@@ -1,3 +1,4 @@
+import 'package:clocktower_notes/about.dart';
 import 'package:clocktower_notes/widgets/main_option.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,16 @@ class _HomePageState extends State<HomePage> {
     _checkStore();
   }
 
+  void _openAbout() {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const AboutPage()));
+  }
+
+  void _openSettings() {
+    // Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => const SettingsPage()));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +69,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Clocktower Notes"),
+          actions: [
+            IconButton(
+              onPressed: _openAbout,
+              icon: const Icon(Icons.info)
+            ),
+            IconButton(
+                onPressed: _openSettings,
+                icon: const Icon(Icons.settings)
+            ),
+          ],
         ),
         body: Flex(
           direction: Axis.vertical,
