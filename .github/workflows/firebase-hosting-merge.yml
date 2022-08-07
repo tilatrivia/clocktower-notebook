@@ -35,7 +35,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: web-build
-          path: web-build
+          path: build/web
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
