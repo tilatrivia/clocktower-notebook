@@ -12,7 +12,7 @@ Blood on the Clocktower is a social deduction game by Steven Medway and The Pand
 
 ## Current Features
 
-Version 0.2
+Version 1.0
 
 * Selecting from three original scripts
 * Adding, naming, and reordering players

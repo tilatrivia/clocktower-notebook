@@ -493,16 +493,231 @@ class Character {
             description: "Each night except for the first, choose a player; they die. Townsfolk abilities yield false info. Each day, if no-one is executed, evil wins.");
 
       // Bad Moon Rising
-      // case CharacterId.replace:
-      //   return const Character(
-      //       characterId: CharacterId.replace,
-      //       primaryScript: Scripts.sectsAndViolets,
-      //       name: "Replace",
-      //       type: CharacterType.townsfolk,
-      //       alignment: CharacterAlignment.good,
-      //       icon: ClocktowerIcons.characterReplace,
-      //       description: "Description");
-
+      case CharacterId.grandmother:
+        return const Character(
+            characterId: CharacterId.grandmother,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Grandmother",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterGrandmother,
+            description: "You start knowing a good player & their character. If the Demon kills them, you die too.");
+      case CharacterId.sailor:
+        return const Character(
+            characterId: CharacterId.sailor,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Sailor",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterSailor,
+            description: "Each night, choose an alive player: either you or they are drunk until dusk. You can't die.");
+      case CharacterId.chambermaid:
+        return const Character(
+            characterId: CharacterId.chambermaid,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Chambermaid",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterChambermaid,
+            description: "Each night, choose 2 alive players (not yourself): you learn how many woke tonight due to their ability.");
+      case CharacterId.exorcist:
+        return const Character(
+            characterId: CharacterId.exorcist,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Exorcist",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterExorcist,
+            description: "Each night except for the first, choose a player (different to last night): the Demon, if chosen, learns who you are then doesn't wake tonight.");
+      case CharacterId.innkeeper:
+        return const Character(
+            characterId: CharacterId.innkeeper,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Innkeeper",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterInnkeeper,
+            description: "Each night except for the first, choose 2 players: they can't die tonight, but 1 is drunk until dusk.");
+      case CharacterId.gambler:
+        return const Character(
+          characterId: CharacterId.gambler,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Gambler",
+          type: CharacterType.townsfolk,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterGambler,
+          description: "Each night except for the first, choose a player & guess their character: if you guess wrong, you die.");
+      case CharacterId.gossip:
+        return const Character(
+            characterId: CharacterId.gossip,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Gossip",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterGossip,
+            description: "Each day, you may make a public statement. Tonight, if it was true, a player dies.");
+      case CharacterId.courtier:
+        return const Character(
+            characterId: CharacterId.courtier,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Courtier",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterCourtier,
+            description: "Once per game, at night, choose a character: they are drunk for 3 nights & 3 days.");
+      case CharacterId.professor:
+        return const Character(
+          characterId: CharacterId.professor,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Professor",
+          type: CharacterType.townsfolk,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterProfessor,
+          description: "Once per game, at night (except for the first), choose a dead player: if they are a Townsfolk, they are resurrected.");
+      case CharacterId.minstrel:
+        return const Character(
+            characterId: CharacterId.minstrel,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Minstrel",
+            type: CharacterType.townsfolk,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterMinstrel,
+            description: "When a Minion dies by execution, all other players (except Travellers) are drunk until dusk tomorrow.");
+      case CharacterId.teaLady:
+        return const Character(
+          characterId: CharacterId.teaLady,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Tea Lady",
+          type: CharacterType.townsfolk,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterTeaLady,
+          description: "If both your alive neighbors are good, they can't die.");
+      case CharacterId.pacifist:
+        return const Character(
+          characterId: CharacterId.pacifist,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Pacifist",
+          type: CharacterType.townsfolk,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterPacifist,
+          description: "Executed good players might not die.");
+      case CharacterId.fool:
+        return const Character(
+          characterId: CharacterId.fool,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Fool",
+          type: CharacterType.townsfolk,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterFool,
+          description: "The first time you die, you don't.");
+      case CharacterId.goon:
+        return const Character(
+          characterId: CharacterId.goon,
+          primaryScript: Scripts.sectsAndViolets,
+          name: "Goon",
+          type: CharacterType.outsider,
+          alignment: CharacterAlignment.good,
+          icon: ClocktowerIcons.characterGoon,
+          description: "Each night, the 1st player to choose you with their ability is drunk until dusk. You become their alignment.");
+      case CharacterId.lunatic:
+        return const Character(
+            characterId: CharacterId.lunatic,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Lunatic",
+            type: CharacterType.outsider,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterLunatic,
+            description: "You think you are a Demon, but you are not. The Demon knows who you are & who you choose at night.");
+      case CharacterId.tinker:
+        return const Character(
+            characterId: CharacterId.tinker,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Tinker",
+            type: CharacterType.outsider,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterTinker,
+            description: "You might die at any time.");
+      case CharacterId.moonchild:
+        return const Character(
+            characterId: CharacterId.moonchild,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Moonchild",
+            type: CharacterType.outsider,
+            alignment: CharacterAlignment.good,
+            icon: ClocktowerIcons.characterMoonchild,
+            description: "When you learn that you died, publicly choose 1 alive player. Tonight, if it was a good player, they die.");
+      case CharacterId.godfather:
+        return const Character(
+            characterId: CharacterId.godfather,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Godfather",
+            type: CharacterType.minion,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterGodfather,
+            description: "You start knowing which Outsiders are in play. If 1 died today, choose a player tonight: they die. [-1 or +1 Outsider]");
+      case CharacterId.devilsAdvocate:
+        return const Character(
+            characterId: CharacterId.devilsAdvocate,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Devils Advocate",
+            type: CharacterType.minion,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterDevilsAdvocate,
+            description: "Each night, choose a living player (different to last night): if executed tomorrow, they don't die.");
+      case CharacterId.assassin:
+        return const Character(
+            characterId: CharacterId.assassin,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Assassin",
+            type: CharacterType.minion,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterAssassin,
+            description: "Once per game, at night (except for the first), choose a player: they die, even if for some reason they could not.");
+      case CharacterId.mastermind:
+        return const Character(
+            characterId: CharacterId.mastermind,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Mastermind",
+            type: CharacterType.minion,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterMastermind,
+            description: "If the Demon dies by execution (ending the game), play for 1 more day. If a player is then executed, their team loses.");
+      case CharacterId.zombuul:
+        return const Character(
+            characterId: CharacterId.zombuul,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Zombuul",
+            type: CharacterType.demon,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterZombuul,
+            description: "Each night except for the first, if no-one died today, choose a player: they die. The 1st time you die, you live but register as dead.");
+      case CharacterId.pukka:
+        return const Character(
+            characterId: CharacterId.pukka,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Pukka",
+            type: CharacterType.demon,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterPukka,
+            description: "Each night, choose a player: they are poisoned. The previously poisoned player dies then becomes healthy.");
+      case CharacterId.shabaloth:
+        return const Character(
+            characterId: CharacterId.shabaloth,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Shabaloth",
+            type: CharacterType.demon,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterShabaloth,
+            description: "Each night except for the first, choose 2 players: they die. A dead player you chose last night might be regurgitated.");
+      case CharacterId.po:
+        return const Character(
+            characterId: CharacterId.po,
+            primaryScript: Scripts.sectsAndViolets,
+            name: "Po",
+            type: CharacterType.demon,
+            alignment: CharacterAlignment.evil,
+            icon: ClocktowerIcons.characterPo,
+            description: "Each night except for the first, you may choose a player: they die. If your last choice was no-one, choose 3 players tonight.");
 
       default:
         throw Exception("Invalid CharacterId given to Character factory");
